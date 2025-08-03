@@ -1,1 +1,0 @@
-console.log('My Embroidery 起動');
