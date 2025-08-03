@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>My Embroidery</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>My Embroidery</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
     <h1>My Embroidery</h1>
-    <nav>
-      <button class="tab" onclick="showTab('dmc')">DMC</button>
-      <button class="tab" onclick="showTab('cosmo')">COSMO</button>
-    </nav>
-  </header>
-  <main>
-    <section id="dmc" class="tab-content"></section>
-    <section id="cosmo" class="tab-content" style="display:none;"></section>
-  </main>
-  <script src="script.js"></script>
+    <div class="tabs">
+        <button class="tab-button" onclick="switchTab('dmc')">DMC</button>
+        <button class="tab-button" onclick="switchTab('cosmo')">COSMO</button>
+    </div>
+    <div id="thread-list"></div>
+    <script src="script.js"></script>
 </body>
 </html>

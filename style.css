@@ -1,44 +1,43 @@
-
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #fdf8f4;
-  color: #4b3b2a;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+    font-family: sans-serif;
+    background-color: #fef9f6;
+    color: #3c2f2f;
+    text-align: center;
+    padding: 20px;
 }
-header {
-  background-color: #fff5ee;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
 }
-nav {
-  margin-top: 1rem;
+.tabs {
+    margin-bottom: 20px;
 }
-button.tab {
-  margin: 0.3rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: #e4d5c7;
-  color: #4b3b2a;
-  border-radius: 5px;
-  cursor: pointer;
+.tab-button {
+    background-color: #e6ddd4;
+    border: none;
+    padding: 12px 24px;
+    margin: 5px;
+    font-size: 1em;
+    border-radius: 8px;
+    cursor: pointer;
 }
-button.tab:hover {
-  background-color: #d3c0b0;
+img.thread-image {
+    width: 40px;
+    vertical-align: middle;
 }
-main {
-  padding: 2rem;
+.heart {
+    cursor: pointer;
+    font-size: 1.4em;
+    color: gray;
 }
-input[type="number"] {
-  width: 60px;
+.heart.wanted {
+    color: red;
 }
 table {
-  margin: auto;
-  border-collapse: collapse;
-  width: 90%;
+    margin: auto;
+    border-collapse: collapse;
 }
-td, th {
-  padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
+th, td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ccc;
 }
