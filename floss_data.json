@@ -1,0 +1,22 @@
+{
+  "dmc": [
+    {
+      "number": "310",
+      "name": "Black"
+    },
+    {
+      "number": "321",
+      "name": "Red"
+    }
+  ],
+  "cosmo": [
+    {
+      "number": "500",
+      "name": "Light Pink"
+    },
+    {
+      "number": "501",
+      "name": "Pink"
+    }
+  ]
+}
