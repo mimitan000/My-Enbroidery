@@ -6,7 +6,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>My Embroidery 完全版</h1>
+    <h1>My Embroidery</h1>
+    <div class="tabs">
+        <button onclick="switchTab('dmc')">DMC</button>
+        <button onclick="switchTab('cosmo')">COSMO</button>
+        <button onclick="switchTab('olympus')">Olympus</button>
+        <button onclick="switchTab('anchor')">Anchor</button>
+        <button onclick="switchTab('other')">その他</button>
+    </div>
+    <div id="thread-list"></div>
     <script src="app.js"></script>
 </body>
 </html>
