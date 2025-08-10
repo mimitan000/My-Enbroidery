@@ -1,17 +1,14 @@
 
-console.log("My Embroidery v3.3.7");
+console.log("My Embroidery v3.3.8");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
 const state={currentTab:"inventory",currentMaker:"DMC",data:{}};
 
 document.addEventListener("DOMContentLoaded",()=>{
-  // data
   MAKERS.forEach(m=> state.data[m]=Array.isArray(EMB_DATA[m])?EMB_DATA[m]:[]);
-  bindTabs();
-  bindMakerSwitch(document);
-  renderJump();
-  renderList();
+  bindTabs(); bindMakerSwitch(document);
+  renderJump(); renderList();
   updateStickyOffset();
   window.addEventListener("resize", updateStickyOffset, {passive:true});
 });
@@ -55,10 +52,7 @@ function updateStickyOffset(){
   document.documentElement.style.setProperty("--sticky-offset", offset+"px");
 }
 
-function leadingHundreds(s){
-  const m=String(s||"").match(/^\d+/); if(!m) return null;
-  const n=parseInt(m[0],10); return Math.floor(n/100)*100;
-}
+function leadingHundreds(s){ const m=String(s||"").match(/^\d+/); if(!m) return null; const n=parseInt(m[0],10); return Math.floor(n/100)*100; }
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
     const na=parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
@@ -76,9 +70,11 @@ function renderJump(){
     const b=document.createElement("button");
     b.className="jump"; b.textContent=String(s);
     b.addEventListener("click",()=>{
+      // 1セクションしかない場合はトップへスクロールして反応を見せる
+      if(sections.length===1){ window.scrollTo({top:0,behavior:"smooth"}); return; }
       const a=document.querySelector(`[data-anchor="${s}"]`);
       if(!a) return;
-      a.scrollIntoView({behavior:"smooth",block:"start"});
+      a.scrollIntoView({behavior:"smooth", block:"start"});
     });
     bar.appendChild(b);
   });
@@ -97,17 +93,13 @@ function renderList(){
     const section=leadingHundreds(it.number);
     const anchor=tpl.querySelector(".anchor");
     if(section!==currentSection){ currentSection=section; anchor.setAttribute("data-anchor",section); anchor.id=`sec-${section}`; }
-    const sw=tpl.querySelector(".swatch"); sw.style.setProperty("--yarn-color", it.hex||"#ccc");
+    tpl.querySelector(".swatch").style.setProperty("--yarn-color", it.hex||"#ccc");
     tpl.querySelector(".number").textContent=it.number;
     tpl.querySelector(".maker").textContent=maker;
-    const qtyEl=tpl.querySelector(".qty");
-    const plus=tpl.querySelector(".plus");
-    const minus=tpl.querySelector(".minus");
-    const heart=tpl.querySelector(".heart");
-    let q=parseInt(inv[it.number]||0,10); qtyEl.textContent=q;
-    plus.addEventListener("click",()=>{ q+=1; qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
-    minus.addEventListener("click",()=>{ q=Math.max(0,q-1); qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
-    heart.textContent=wished.has(it.number)?"♥️":"♡";
+    const qtyEl=tpl.querySelector(".qty"); let q=parseInt(inv[it.number]||0,10); qtyEl.textContent=q;
+    tpl.querySelector(".plus").addEventListener("click",()=>{ q+=1; qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
+    tpl.querySelector(".minus").addEventListener("click",()=>{ q=Math.max(0,q-1); qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
+    const heart=tpl.querySelector(".heart"); heart.textContent=wished.has(it.number)?"♥️":"♡";
     heart.addEventListener("click",()=>{ const set=new Set(getWishlist(maker)); if(set.has(it.number)) set.delete(it.number); else set.add(it.number); setWishlist(maker,[...set]); heart.textContent=set.has(it.number)?"♥️":"♡"; });
     list.appendChild(tpl);
   });
