@@ -92,7 +92,7 @@ main{ padding:12px 12px 28px;}
   grid-template-rows: none; /* 既存指定を無効化 */
 }
 .ops button{
-  min-width: 36px;
+  min-width: 32px;
   padding: 6px 10px;
   border-radius: 10px;
 }
