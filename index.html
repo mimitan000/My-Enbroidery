@@ -9,16 +9,14 @@
 <body>
 <header class="app-header">
   <div class="title">
-    <div class="logo"></div>
+    <div class="logo" aria-hidden="true"></div>
     <h1><span>My</span><br><span>Embroidery</span></h1>
+    <small class="ver">v3.4.1</small>
   </div>
-  <div class="right">
-    <small class="ver">v3.4.0</small>
-    <nav class="tabs" role="tablist" aria-label="表示切替">
-      <button class="tab-btn active" data-tab="inventory" role="tab" aria-selected="true">在庫</button>
-      <button class="tab-btn" data-tab="wishlist" role="tab" aria-selected="false" aria-label="欲しい物">♥️</button>
-    </nav>
-  </div>
+  <nav class="tabs" role="tablist" aria-label="表示切替">
+    <button class="tab-btn active" data-tab="inventory" role="tab" aria-selected="true">在庫</button>
+    <button class="tab-btn" data-tab="wishlist" role="tab" aria-label="欲しい物" aria-selected="false">♥️</button>
+  </nav>
 </header>
 
 <main>
@@ -42,7 +40,7 @@
       <button class="maker-btn" data-maker="Olympus">Olympus</button>
     </div>
     <div id="wishlist-list" class="grid"></div>
-    <div id="wishlist-empty" class="empty" hidden>♥️ は空です。商品カードの右端の ♥️ を押すと追加できます。</div>
+    <div id="wishlist-empty" class="empty" hidden>♥️ はまだ空です。リストに追加するとここに表示されます。</div>
   </section>
 </main>
 

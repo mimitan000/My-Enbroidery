@@ -1,5 +1,5 @@
 
-console.log("My Embroidery v3.4.0");
+console.log("My Embroidery v3.4.1");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
@@ -7,8 +7,10 @@ const state={currentTab:"inventory",currentMaker:"DMC",data:{}};
 
 document.addEventListener("DOMContentLoaded",()=>{
   MAKERS.forEach(m=> state.data[m]=Array.isArray(EMB_DATA[m])?EMB_DATA[m]:[]);
-  bindTabs(); bindMakerSwitch(document);
-  renderJump(); renderList();
+  bindTabs();
+  bindMakerSwitch(document);
+  renderJump();
+  renderList();
   updateStickyOffset();
   window.addEventListener("resize", updateStickyOffset, {passive:true});
 });
@@ -38,17 +40,14 @@ function bindMakerSwitch(scope){
       if(state.currentTab==="inventory"){
         state.currentMaker=maker;
         toast(`${maker} に切り替えました`);
-        renderJump(); renderList();
+        renderJump(); renderList(); updateStickyOffset();
       }else{
-        renderWishlist(maker);
+        renderWishlist(maker); updateStickyOffset();
       }
-      window.scrollTo({top:0,behavior:"smooth"});
-      updateStickyOffset();
     });
   });
 }
 
-// Sticky offset
 function updateStickyOffset(){
   const header=document.querySelector(".app-header");
   const bar=document.getElementById("jumpbar");
@@ -56,24 +55,18 @@ function updateStickyOffset(){
   document.documentElement.style.setProperty("--sticky-offset", offset+"px");
 }
 
-// Helpers
-const invKey=m=>`inventory:${m}`;
-const wishKey=m=>`wishlist:${m}`;
-const getInventory=m=>JSON.parse(localStorage.getItem(invKey(m))||"{}");
-const setInventory=(m,o)=>localStorage.setItem(invKey(m),JSON.stringify(o));
-const getWishlist=m=>JSON.parse(localStorage.getItem(wishKey(m))||"[]");
-const setWishlist=(m,a)=>localStorage.setItem(wishKey(m),JSON.stringify(a));
-
-function leadingHundreds(s){ const m=String(s||"").match(/^\\d+/); if(!m) return null; const n=parseInt(m[0],10); return Math.floor(n/100)*100; }
+function leadingHundreds(s){
+  const m=String(s||"").match(/^\d+/); if(!m) return null;
+  const n=parseInt(m[0],10); return Math.floor(n/100)*100;
+}
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
-    const na=parseInt((String(a.number).match(/^\\d+/)||["0"])[0],10);
-    const nb=parseInt((String(b.number).match(/^\\d+/)||["0"])[0],10);
+    const na=parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
+    const nb=parseInt((String(b.number).match(/^\d+/)||["0"])[0],10);
     return na-nb||String(a.number).localeCompare(String(b.number));
   });
 }
 
-// Jump
 function renderJump(){
   const bar=document.getElementById("jumpbar"); bar.innerHTML="";
   const items=state.data[state.currentMaker]||[];
@@ -83,7 +76,7 @@ function renderJump(){
     b.className="jump"; b.textContent=String(s);
     b.addEventListener("click",()=>{
       const a=document.querySelector(`[data-anchor="${s}"]`);
-      if(!a){ window.scrollTo({top:0,behavior:"smooth"}); return; }
+      if(!a) return;
       a.scrollIntoView({behavior:"smooth", block:"start"});
     });
     bar.appendChild(b);
@@ -91,7 +84,6 @@ function renderJump(){
   updateStickyOffset();
 }
 
-// List
 function renderList(){
   const list=document.getElementById("list"); list.innerHTML="";
   const maker=state.currentMaker;
@@ -104,19 +96,22 @@ function renderList(){
     const section=leadingHundreds(it.number);
     const anchor=tpl.querySelector(".anchor");
     if(section!==currentSection){ currentSection=section; anchor.setAttribute("data-anchor",section); anchor.id=`sec-${section}`; }
-    const sw=tpl.querySelector(".swatch"); sw.style.setProperty("--yarn-color", it.hex||"#ccc");
+    tpl.querySelector(".swatch").style.setProperty("--yarn-color", it.hex||"#ccc");
     tpl.querySelector(".number").textContent=it.number;
     tpl.querySelector(".maker").textContent=maker;
-    const qtyEl=tpl.querySelector(".qty"); let q=parseInt(inv[it.number]||0,10); qtyEl.textContent=q;
-    tpl.querySelector(".plus").addEventListener("click",()=>{ q+=1; qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
-    tpl.querySelector(".minus").addEventListener("click",()=>{ q=Math.max(0,q-1); qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
-    const heart=tpl.querySelector(".heart"); heart.textContent=wished.has(it.number)?"♥️":"♡";
+    const qtyEl=tpl.querySelector(".qty");
+    const plus=tpl.querySelector(".plus");
+    const minus=tpl.querySelector(".minus");
+    const heart=tpl.querySelector(".heart");
+    let q=parseInt(inv[it.number]||0,10); qtyEl.textContent=q;
+    plus.addEventListener("click",()=>{ q+=1; qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
+    minus.addEventListener("click",()=>{ q=Math.max(0,q-1); qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
+    const wInitial=wished.has(it.number); heart.textContent=wInitial?"♥️":"♡";
     heart.addEventListener("click",()=>{ const set=new Set(getWishlist(maker)); if(set.has(it.number)) set.delete(it.number); else set.add(it.number); setWishlist(maker,[...set]); heart.textContent=set.has(it.number)?"♥️":"♡"; });
     list.appendChild(tpl);
   });
 }
 
-// Wishlist
 function renderWishlist(filterMaker="ALL"){
   const box=document.getElementById("wishlist-list"); box.innerHTML="";
   const empty=document.getElementById("wishlist-empty");
@@ -145,5 +140,13 @@ function renderWishlist(filterMaker="ALL"){
   panel.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
   const t=[...panel.querySelectorAll(".maker-btn")].find(b=>b.dataset.maker===filterMaker); if(t) t.classList.add("active");
 }
+
+// storage helpers
+const invKey=m=>`inventory:${m}`;
+const wishKey=m=>`wishlist:${m}`;
+const getInventory=m=>JSON.parse(localStorage.getItem(invKey(m))||"{}");
+const setInventory=(m,o)=>localStorage.setItem(invKey(m),JSON.stringify(o));
+const getWishlist=m=>JSON.parse(localStorage.getItem(wishKey(m))||"[]");
+const setWishlist=(m,a)=>localStorage.setItem(wishKey(m),JSON.stringify(a));
 
 function toast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1200); }
