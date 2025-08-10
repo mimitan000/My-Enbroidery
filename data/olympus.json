@@ -1,0 +1,133 @@
+{
+  "maker": "Olympus",
+  "items": [
+    {
+      "number": "120",
+      "hex": "#c0392b"
+    },
+    {
+      "number": "121",
+      "hex": "#f1c40f"
+    },
+    {
+      "number": "122",
+      "hex": "#2ecc71"
+    },
+    {
+      "number": "123",
+      "hex": "#2980b9"
+    },
+    {
+      "number": "124",
+      "hex": "#8e44ad"
+    },
+    {
+      "number": "125",
+      "hex": "#34495e"
+    },
+    {
+      "number": "126",
+      "hex": "#95a5a6"
+    },
+    {
+      "number": "127",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "260",
+      "hex": "#f1c40f"
+    },
+    {
+      "number": "261",
+      "hex": "#2ecc71"
+    },
+    {
+      "number": "262",
+      "hex": "#2980b9"
+    },
+    {
+      "number": "263",
+      "hex": "#8e44ad"
+    },
+    {
+      "number": "264",
+      "hex": "#34495e"
+    },
+    {
+      "number": "265",
+      "hex": "#95a5a6"
+    },
+    {
+      "number": "266",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "267",
+      "hex": "#c0392b"
+    },
+    {
+      "number": "360",
+      "hex": "#2ecc71"
+    },
+    {
+      "number": "361",
+      "hex": "#2980b9"
+    },
+    {
+      "number": "362",
+      "hex": "#8e44ad"
+    },
+    {
+      "number": "363",
+      "hex": "#34495e"
+    },
+    {
+      "number": "364",
+      "hex": "#95a5a6"
+    },
+    {
+      "number": "365",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "366",
+      "hex": "#c0392b"
+    },
+    {
+      "number": "367",
+      "hex": "#f1c40f"
+    },
+    {
+      "number": "900",
+      "hex": "#2980b9"
+    },
+    {
+      "number": "901",
+      "hex": "#8e44ad"
+    },
+    {
+      "number": "902",
+      "hex": "#34495e"
+    },
+    {
+      "number": "903",
+      "hex": "#95a5a6"
+    },
+    {
+      "number": "904",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "905",
+      "hex": "#c0392b"
+    },
+    {
+      "number": "906",
+      "hex": "#f1c40f"
+    },
+    {
+      "number": "907",
+      "hex": "#2ecc71"
+    }
+  ]
+}

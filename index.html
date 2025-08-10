@@ -1,20 +1,60 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>My Embroidery</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Embroidery</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="app-header">
     <h1>My Embroidery</h1>
-    <div class="tabs">
-        <button onclick="switchTab('dmc')">DMC</button>
-        <button onclick="switchTab('cosmo')">COSMO</button>
-        <button onclick="switchTab('olympus')">Olympus</button>
-        <button onclick="switchTab('anchor')">Anchor</button>
-        <button onclick="switchTab('other')">その他</button>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="inventory">在庫</button>
+      <button class="tab-btn" data-tab="wishlist">欲しい物</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inventory" class="tab-panel active">
+      <div class="maker-switch">
+        <button class="maker-btn active" data-maker="DMC">DMC</button>
+        <button class="maker-btn" data-maker="COSMO">COSMO</button>
+        <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      </div>
+
+      <div id="jumpbar" class="jumpbar"></div>
+
+      <div id="list" class="floss-list"></div>
+    </section>
+
+    <section id="wishlist" class="tab-panel">
+      <div class="maker-switch small">
+        <button class="maker-btn active" data-maker="ALL">すべて</button>
+        <button class="maker-btn" data-maker="DMC">DMC</button>
+        <button class="maker-btn" data-maker="COSMO">COSMO</button>
+        <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      </div>
+      <div id="wishlist-list" class="floss-list"></div>
+    </section>
+  </main>
+
+  <template id="item-template">
+    <div class="floss-item">
+      <a class="anchor" aria-hidden="true"></a>
+      <div class="yarn" aria-hidden="true"></div>
+      <div class="meta">
+        <div class="number"></div>
+        <div class="controls">
+          <button class="minus" aria-label="minus">－</button>
+          <span class="qty">0</span>
+          <button class="plus" aria-label="plus">＋</button>
+          <button class="heart" aria-label="wishlist">♡</button>
+        </div>
+      </div>
     </div>
-    <div id="thread-list"></div>
-    <script src="app.js?v=1"></script>
+  </template>
+
+  <script src="script.js"></script>
 </body>
 </html>

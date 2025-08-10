@@ -1,0 +1,133 @@
+{
+  "maker": "COSMO",
+  "items": [
+    {
+      "number": "110",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "111",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "112",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "113",
+      "hex": "#3498db"
+    },
+    {
+      "number": "114",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "115",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "116",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "117",
+      "hex": "#16a085"
+    },
+    {
+      "number": "240",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "241",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "242",
+      "hex": "#3498db"
+    },
+    {
+      "number": "243",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "244",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "245",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "246",
+      "hex": "#16a085"
+    },
+    {
+      "number": "247",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "330",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "331",
+      "hex": "#3498db"
+    },
+    {
+      "number": "332",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "333",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "334",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "335",
+      "hex": "#16a085"
+    },
+    {
+      "number": "336",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "337",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "800",
+      "hex": "#3498db"
+    },
+    {
+      "number": "801",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "802",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "803",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "804",
+      "hex": "#16a085"
+    },
+    {
+      "number": "805",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "806",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "807",
+      "hex": "#27ae60"
+    }
+  ]
+}
