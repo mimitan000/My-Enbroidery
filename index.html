@@ -11,36 +11,34 @@
   <div class="title">
     <div class="logo" aria-hidden="true"></div>
     <h1><span>My</span><br><span>Embroidery</span></h1>
-    <small class="ver">v3.4.1</small>
+    <small class="ver">v3.4.2</small>
   </div>
   <nav class="tabs" role="tablist" aria-label="表示切替">
-    <button class="tab-btn active" data-tab="inventory" role="tab" aria-selected="true">在庫</button>
-    <button class="tab-btn" data-tab="wishlist" role="tab" aria-label="欲しい物" aria-selected="false">♥️</button>
+    <button type="button" class="tab-btn active" data-tab="inventory" role="tab" aria-selected="true">在庫</button>
+    <button type="button" class="tab-btn" data-tab="wishlist" role="tab" aria-selected="false" aria-label="欲しい物">♥️</button>
   </nav>
 </header>
 
 <main>
   <section id="inventory" class="tab-panel active" role="tabpanel" aria-label="在庫">
     <div class="maker-switch pill" role="group" aria-label="メーカー">
-      <button class="maker-btn active" data-maker="DMC">DMC</button>
-      <button class="maker-btn" data-maker="COSMO">COSMO</button>
-      <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      <button type="button" class="maker-btn active" data-maker="DMC">DMC</button>
+      <button type="button" class="maker-btn" data-maker="COSMO">COSMO</button>
+      <button type="button" class="maker-btn" data-maker="Olympus">Olympus</button>
     </div>
-
     <div id="jumpbar" class="jumpbar" aria-label="ジャンプバー"></div>
-
     <div id="list" class="grid"></div>
   </section>
 
   <section id="wishlist" class="tab-panel" role="tabpanel" aria-label="欲しい物">
     <div class="maker-switch pill small" role="group" aria-label="メーカー絞り込み">
-      <button class="maker-btn active" data-maker="ALL">すべて</button>
-      <button class="maker-btn" data-maker="DMC">DMC</button>
-      <button class="maker-btn" data-maker="COSMO">COSMO</button>
-      <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      <button type="button" class="maker-btn active" data-maker="ALL">すべて</button>
+      <button type="button" class="maker-btn" data-maker="DMC">DMC</button>
+      <button type="button" class="maker-btn" data-maker="COSMO">COSMO</button>
+      <button type="button" class="maker-btn" data-maker="Olympus">Olympus</button>
     </div>
     <div id="wishlist-list" class="grid"></div>
-    <div id="wishlist-empty" class="empty" hidden>♥️ はまだ空です。リストに追加するとここに表示されます。</div>
+    <div id="wl-empty" class="empty" hidden>♥️ はまだ空です。糸カードの ♥️ を押すと追加されます。</div>
   </section>
 </main>
 
@@ -52,10 +50,10 @@
     <div class="swatch" aria-hidden="true"></div>
     <div class="info"><div class="number"></div><div class="maker"></div></div>
     <div class="ops">
-      <button class="plus" aria-label="所持数を増やす">＋</button>
+      <button type="button" class="plus" aria-label="所持数を増やす">＋</button>
       <span class="qty" aria-label="所持数">0</span>
-      <button class="minus" aria-label="所持数を減らす">－</button>
-      <button class="heart" aria-label="欲しい物に追加/解除">♡</button>
+      <button type="button" class="minus" aria-label="所持数を減らす">－</button>
+      <button type="button" class="heart" aria-label="欲しい物に追加/解除">♡</button>
     </div>
   </div>
 </template>
