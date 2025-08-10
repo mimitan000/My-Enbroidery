@@ -3,27 +3,67 @@
   "items": [
     {
       "number": "100",
-      "hex": "#c0392b"
+      "hex": "#C0392B"
     },
     {
       "number": "101",
-      "hex": "#c0392b"
+      "hex": "#D35400"
     },
     {
       "number": "102",
-      "hex": "#c0392b"
+      "hex": "#F39C12"
     },
     {
       "number": "103",
-      "hex": "#c0392b"
+      "hex": "#27AE60"
     },
     {
       "number": "104",
-      "hex": "#c0392b"
+      "hex": "#2980B9"
     },
     {
       "number": "105",
-      "hex": "#c0392b"
+      "hex": "#8E44AD"
+    },
+    {
+      "number": "106",
+      "hex": "#7F8C8D"
+    },
+    {
+      "number": "107",
+      "hex": "#C0392B"
+    },
+    {
+      "number": "108",
+      "hex": "#D35400"
+    },
+    {
+      "number": "109",
+      "hex": "#F39C12"
+    },
+    {
+      "number": "110",
+      "hex": "#27AE60"
+    },
+    {
+      "number": "111",
+      "hex": "#2980B9"
+    },
+    {
+      "number": "112",
+      "hex": "#8E44AD"
+    },
+    {
+      "number": "113",
+      "hex": "#7F8C8D"
+    },
+    {
+      "number": "114",
+      "hex": "#C0392B"
+    },
+    {
+      "number": "115",
+      "hex": "#D35400"
     }
   ]
 }

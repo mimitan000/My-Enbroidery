@@ -1,1 +1,64 @@
-<!doctype html><meta charset='utf-8'><title>My Embroidery</title><link rel='stylesheet' href='styles.css'><body><header class='app-header'><div class='title'><div class='logo'></div><h1>My Embroidery</h1><small class='ver'>v3.3.1</small></div><nav class='tabs'><button class='tab-btn active' data-tab='inventory'>在庫</button><button class='tab-btn' data-tab='wishlist'>欲しい物</button></nav></header><main><section id='inventory' class='tab-panel active'><div class='maker-switch pill'><button class='maker-btn active' data-maker='DMC'>DMC</button><button class='maker-btn' data-maker='COSMO'>COSMO</button><button class='maker-btn' data-maker='Olympus'>Olympus</button></div><div id='jumpbar' class='jumpbar'></div><div id='list' class='grid'></div></section><section id='wishlist' class='tab-panel'><div class='maker-switch pill small'><button class='maker-btn active' data-maker='ALL'>すべて</button><button class='maker-btn' data-maker='DMC'>DMC</button><button class='maker-btn' data-maker='COSMO'>COSMO</button><button class='maker-btn' data-maker='Olympus'>Olympus</button></div><div id='wishlist-list' class='grid'></div></section></main><div id='toast' class='toast'></div><template id='card-template'><div class='row'><a class='anchor'></a><div class='swatch'></div><div class='info'><div class='number'></div><div class='maker'></div></div><div class='ops'><button class='plus'>＋</button><span class='qty'>0</span><button class='minus'>－</button><button class='heart'>♡</button></div></div></template><script src='script.js'></script>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Embroidery</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="title">
+      <div class="logo" aria-hidden="true"></div>
+      <h1>My Embroidery</h1>
+      <small class="ver">v3.3.2</small>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="表示切替">
+      <button class="tab-btn active" data-tab="inventory" role="tab" aria-selected="true">在庫</button>
+      <button class="tab-btn" data-tab="wishlist" role="tab" aria-selected="false">欲しい物</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inventory" class="tab-panel active" role="tabpanel" aria-label="在庫">
+      <div class="maker-switch pill" role="group" aria-label="メーカー">
+        <button class="maker-btn active" data-maker="DMC">DMC</button>
+        <button class="maker-btn" data-maker="COSMO">COSMO</button>
+        <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      </div>
+
+      <div id="jumpbar" class="jumpbar" aria-label="ジャンプバー"></div>
+
+      <div id="list" class="grid"></div>
+    </section>
+
+    <section id="wishlist" class="tab-panel" role="tabpanel" aria-label="欲しい物">
+      <div class="maker-switch pill small" role="group" aria-label="メーカー絞り込み">
+        <button class="maker-btn active" data-maker="ALL">すべて</button>
+        <button class="maker-btn" data-maker="DMC">DMC</button>
+        <button class="maker-btn" data-maker="COSMO">COSMO</button>
+        <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      </div>
+      <div id="wishlist-list" class="grid"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <template id="card-template">
+    <div class="row">
+      <a class="anchor" aria-hidden="true"></a>
+      <div class="swatch" aria-hidden="true"></div>
+      <div class="info"><div class="number"></div><div class="maker"></div></div>
+      <div class="ops">
+        <button class="plus" aria-label="所持数を増やす">＋</button>
+        <span class="qty" aria-label="所持数">0</span>
+        <button class="minus" aria-label="所持数を減らす">－</button>
+        <button class="heart" aria-label="欲しい物に追加/解除">♡</button>
+      </div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
