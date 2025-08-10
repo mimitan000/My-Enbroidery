@@ -1,30 +1,20 @@
 
-console.log("My Embroidery v3.3.6");
-
-// 追加：sticky総高さを計算してCSS変数に反映
-function updateStickyOffset(){
-  const header = document.querySelector(".app-header");
-  const bar = document.getElementById("jumpbar");
-  const offset =
-    (header?.offsetHeight || 0) +
-    (bar?.offsetHeight || 0) + 8; // 少し余裕
-  document.documentElement.style.setProperty("--sticky-offset", offset + "px");
-}
+console.log("My Embroidery v3.3.7");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
 const state={currentTab:"inventory",currentMaker:"DMC",data:{}};
 
-document.addEventListener("DOMContentLoaded",init);
-
-function init(){
-  // assign embedded data safely
+document.addEventListener("DOMContentLoaded",()=>{
+  // data
   MAKERS.forEach(m=> state.data[m]=Array.isArray(EMB_DATA[m])?EMB_DATA[m]:[]);
   bindTabs();
   bindMakerSwitch(document);
   renderJump();
   renderList();
-}
+  updateStickyOffset();
+  window.addEventListener("resize", updateStickyOffset, {passive:true});
+});
 
 function bindTabs(){
   document.querySelectorAll(".tab-btn").forEach(btn=>{
@@ -37,6 +27,7 @@ function bindTabs(){
       if(state.currentTab==="inventory"){ renderJump(); renderList(); }
       else { renderWishlist(); }
       window.scrollTo({top:0,behavior:"smooth"});
+      updateStickyOffset();
     });
   });
 }
@@ -48,14 +39,20 @@ function bindMakerSwitch(scope){
       btn.classList.add("active");
       const maker=btn.dataset.maker;
       if(state.currentTab==="inventory"){
-        state.currentMaker=maker;
-        toast(`${maker} に切り替えました`);
+        state.currentMaker=maker; toast(`${maker} に切り替えました`);
         renderJump(); renderList();
-      }else{
-        renderWishlist(maker);
-      }
+      }else{ renderWishlist(maker); }
+      window.scrollTo({top:0,behavior:"smooth"});
+      updateStickyOffset();
     });
   });
+}
+
+function updateStickyOffset(){
+  const header=document.querySelector(".app-header");
+  const bar=document.getElementById("jumpbar");
+  const offset=(header?.offsetHeight||0)+(bar?.offsetHeight||0)+8;
+  document.documentElement.style.setProperty("--sticky-offset", offset+"px");
 }
 
 function leadingHundreds(s){
@@ -81,13 +78,11 @@ function renderJump(){
     b.addEventListener("click",()=>{
       const a=document.querySelector(`[data-anchor="${s}"]`);
       if(!a) return;
-      const header=document.querySelector(".app-header");
-      const offset=(header?.offsetHeight||64)+8;
-      const y=a.getBoundingClientRect().top+window.pageYOffset-offset;
-      window.scrollTo({top:y,behavior:"smooth"});
+      a.scrollIntoView({behavior:"smooth",block:"start"});
     });
     bar.appendChild(b);
   });
+  updateStickyOffset();
 }
 
 function renderList(){
@@ -112,7 +107,7 @@ function renderList(){
     let q=parseInt(inv[it.number]||0,10); qtyEl.textContent=q;
     plus.addEventListener("click",()=>{ q+=1; qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
     minus.addEventListener("click",()=>{ q=Math.max(0,q-1); qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
-    const wInitial=wished.has(it.number); heart.textContent=wInitial?"♥️":"♡";
+    heart.textContent=wished.has(it.number)?"♥️":"♡";
     heart.addEventListener("click",()=>{ const set=new Set(getWishlist(maker)); if(set.has(it.number)) set.delete(it.number); else set.add(it.number); setWishlist(maker,[...set]); heart.textContent=set.has(it.number)?"♥️":"♡"; });
     list.appendChild(tpl);
   });
