@@ -22,8 +22,10 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
     if (state.currentTab === "inventory") {
       renderJump();
       renderList();
+      window.scrollTo({top:0, behavior:"smooth"});
     } else {
       renderWishlist();
+      window.scrollTo({top:0, behavior:"smooth"});
     }
   });
 });
@@ -37,10 +39,14 @@ function bindMakerSwitch(scope=document) {
       const maker = btn.dataset.maker;
       if (state.currentTab === "inventory") {
         state.currentMaker = maker;
+        showToast(`${maker} に切り替えました`);
         renderJump();
         renderList();
+        window.scrollTo({top:0, behavior:"smooth"});
       } else {
         renderWishlist(maker);
+        showToast(`欲しい物を ${maker} で表示`);
+        window.scrollTo({top:0, behavior:"smooth"});
       }
     });
   });
@@ -116,8 +122,7 @@ function renderList() {
 
   items.forEach(it=>{
     const section = leadingHundreds(it.number);
-    const tpl = document.getElementById("item-template").content.cloneNode(true);
-    const root = tpl.querySelector(".floss-item");
+    const tpl = document.getElementById("card-template").content.cloneNode(true);
     const anchor = tpl.querySelector(".anchor");
     if (section !== currentSection) {
       currentSection = section;
@@ -128,8 +133,8 @@ function renderList() {
     const yarn = tpl.querySelector(".yarn");
     yarn.style.setProperty("--yarn", it.hex || "#ccc");
 
-    const numEl = tpl.querySelector(".number");
-    numEl.textContent = it.number; // maker name intentionally omitted
+    tpl.querySelector(".number").textContent = it.number;
+    tpl.querySelector(".maker").textContent = maker; // show maker name only
 
     const qtyEl = tpl.querySelector(".qty");
     const minus = tpl.querySelector(".minus");
@@ -188,12 +193,12 @@ function renderWishlist(filterMaker="ALL") {
     });
 
     sorted.forEach(it=>{
-      const tpl = document.getElementById("item-template").content.cloneNode(true);
+      const tpl = document.getElementById("card-template").content.cloneNode(true);
       const yarn = tpl.querySelector(".yarn");
       yarn.style.setProperty("--yarn", it.hex || "#ccc");
 
-      const numEl = tpl.querySelector(".number");
-      numEl.textContent = it.number;
+      tpl.querySelector(".number").textContent = it.number;
+      tpl.querySelector(".maker").textContent = maker;
 
       const heart = tpl.querySelector(".heart");
       heart.textContent = "❤";
@@ -236,4 +241,11 @@ function renderWishlist(filterMaker="ALL") {
   panel.querySelectorAll(".maker-btn").forEach(btn=>btn.classList.remove("active"));
   const target = Array.from(panel.querySelectorAll(".maker-btn")).find(b=>b.dataset.maker===filterMaker);
   if (target) target.classList.add("active");
+}
+
+function showToast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"), 1300);
 }
