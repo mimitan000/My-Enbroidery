@@ -103,3 +103,40 @@ main{ padding:12px 12px 28px;}
   .row{ grid-template-columns: 86px 1fr auto; padding: 10px 14px; }
   .swatch{ width: 78px; height: 50px; }
 }
+
+/* ======== Mobile one-line fix (≤ 480px) ======== */
+@media (max-width: 480px) {
+
+  /* 行を3カラムに固定：小さめ見本 / 情報 / 操作（横並び） */
+  .row{
+    grid-template-columns: 58px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+
+  /* 色見本をさらに小さく */
+  .swatch{
+    width: 52px;
+    height: 38px;
+    border-radius: 8px;
+  }
+
+  /* 情報は2行でコンパクトに（見本の“真横”に表示） */
+  .info .number{ font-size: 16px; line-height: 1.1; }
+  .info .maker { font-size: 10.5px; line-height: 1.1; }
+
+  /* 右の操作は必ず横一列にして折り返さない */
+  .ops{
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .ops button{
+    min-width: 32px;
+    padding: 5px 8px;
+    border-radius: 9px;
+  }
+  .ops .qty{ min-width: 14px; text-align: center; }
+}
