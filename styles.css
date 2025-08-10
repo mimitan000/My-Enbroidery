@@ -10,18 +10,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,syste
 h1{margin:0;line-height:1.0;font-size:18px;font-weight:700}
 h1 span:first-child{font-size:16px}
 .ver{justify-self:end;color:var(--muted);font-size:12px}
-/* Tabs - smaller */
+/* Tabs (smaller + active border like maker buttons) */
 .tabs{display:flex;gap:8px}
-.tab-btn{border:1px solid var(--line);background:#E7D6CB;border-radius:999px;padding:0 14px;height:40px;min-width:80px;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
-.tab-btn.active{background:#E4D2C6;border-color:#BCAE9A}
+.tab-btn{border:2px solid var(--line);background:#E7D6CB;border-radius:999px;padding:0 14px;height:40px;min-width:80px;font-size:14px;display:inline-flex;align-items:center;justify-content:center;transition:background .15s ease,border-color .15s ease}
+.tab-btn.active{background:#f1dfd3;border-color:#8b7768}
+.tab-btn:focus-visible{outline:2px solid #8b7768;outline-offset:2px}
 /* Main */
 main{padding:12px}
-/* Critically hide non-active panel to avoid stacking */
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 .tab-panel:not(.active){display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important}
 .maker-switch{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap}
-.maker-switch .maker-btn{border:2px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px}
+.maker-switch .maker-btn{border:2px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;transition:background .15s ease,border-color .15s ease}
 .maker-switch .maker-btn.active{border-color:#8b7768;background:#f1dfd3}
 /* Jump */
 .jumpbar{position:sticky;top:64px;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;white-space:nowrap}

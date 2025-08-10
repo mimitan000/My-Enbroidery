@@ -1,5 +1,5 @@
 
-console.log("My Embroidery v3.4.3");
+console.log("My Embroidery v3.4.4");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
@@ -14,7 +14,7 @@ function init(){
   updateStickyOffset();
   window.addEventListener("resize", updateStickyOffset, {passive:true});
 
-  // Maker buttons via event delegation (works in both panels)
+  // Maker buttons via event delegation
   document.addEventListener("click",(ev)=>{
     const btn=ev.target.closest(".maker-btn");
     if(!btn) return;
@@ -38,20 +38,14 @@ function init(){
 function bindTabs(){
   document.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      // Toggle visibility strictly
       document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
       document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
       btn.classList.add("active");
       const targetId=btn.dataset.tab;
       document.getElementById(targetId).classList.add("active");
-
-      // Render appropriate view
       state.currentTab=targetId;
-      if(targetId==="inventory"){
-        renderJump(); renderList(); updateStickyOffset();
-      }else{
-        renderWishlist("ALL");
-      }
+      if(targetId==="inventory"){ renderJump(); renderList(); updateStickyOffset(); }
+      else { renderWishlist("ALL"); }
       window.scrollTo({top:0,behavior:"smooth"});
     });
   });
@@ -142,13 +136,14 @@ function renderWishlist(filterMaker="ALL"){
   const empty=document.getElementById("wl-empty");
   if(empty) empty.hidden = count>0;
 
-  // ensure this panel is active
+  // ensure panel state is correct (wishlist only)
   document.getElementById("wishlist").classList.add("active");
   document.getElementById("inventory").classList.remove("active");
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
   document.querySelector('.tab-btn[data-tab="wishlist"]').classList.add("active");
 }
 
+/* storage */
 const invKey=m=>`inventory:${m}`;
 const wishKey=m=>`wishlist:${m}`;
 const getInventory=m=>JSON.parse(localStorage.getItem(invKey(m))||"{}");
@@ -156,4 +151,5 @@ const setInventory=(m,o)=>localStorage.setItem(invKey(m),JSON.stringify(o));
 const getWishlist=m=>JSON.parse(localStorage.getItem(wishKey(m))||"[]");
 const setWishlist=(m,a)=>localStorage.setItem(wishKey(m),JSON.stringify(a));
 
+/* toast */
 function toast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1200); }
