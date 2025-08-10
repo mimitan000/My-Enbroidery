@@ -44,20 +44,29 @@
 
   <div id="toast" class="toast" aria-live="polite"></div>
 
-  <template id="card-template">
-    <div class="card">
-      <a class="anchor" aria-hidden="true"></a>
-      <div class="yarn" aria-hidden="true"></div>
-      <div class="label number"></div>
-      <div class="label maker"></div>
-      <div class="controls">
-        <button class="minus" aria-label="minus">－</button>
-        <span class="qty">0</span>
-        <button class="plus" aria-label="plus">＋</button>
-        <button class="heart" aria-label="wishlist">♥️</button>
-      </div>
+ <template id="card-template">
+  <div class="row">
+    <a class="anchor" aria-hidden="true"></a>
+
+    <!-- 左：角の取れた色見本（横長） -->
+    <div class="swatch" aria-hidden="true"></div>
+
+    <!-- 中央：情報 -->
+    <div class="info">
+      <div class="number"></div>
+      <div class="maker"></div>
     </div>
-  </template>
+
+    <!-- 右：操作（縦並び） -->
+    <div class="ops">
+      <button class="heart" aria-label="wishlist">♡</button>
+      <button class="plus" aria-label="plus">＋</button>
+      <span class="qty">0</span>
+      <button class="minus" aria-label="minus">－</button>
+    </div>
+  </div>
+</template>
+
 
   <script src="script.js"></script>
 </body>
