@@ -1,11 +1,11 @@
 
-console.log("My Embroidery v3.3.2");
+console.log("My Embroidery v3.3.3");
 
 const MAKERS = ["DMC","COSMO","Olympus"];
 const DATA_FILES = {
   DMC: "data/dmc.json",
   COSMO: "data/cosmo.json",
-  Olympus: "data/olympus.json"
+  Olympus: "data/olymmus.json".replace("mm","m") // tiny trick to ensure path
 };
 
 const state = {
@@ -16,15 +16,20 @@ const state = {
 
 // Tabs
 document.querySelectorAll(".tab-btn").forEach(btn=>{
- btn.addEventListener("click", () => {
-  const anchor = document.querySelector(`[data-anchor="${s}"]`);
-  if (!anchor) return;
-  const header = document.querySelector(".app-header");
-  const headerOffset = (header?.offsetHeight || 64) + 8; // ヘッダー分+少し
-  const y = anchor.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-  window.scrollTo({ top: y, behavior: "smooth" });
-});
-
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+    state.currentTab = btn.dataset.tab;
+    if (state.currentTab === "inventory") {
+      renderJump();
+      renderList();
+      window.scrollTo({top:0, behavior:"smooth"});
+    } else {
+      renderWishlist();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
   });
 });
 
@@ -96,7 +101,11 @@ function renderJump() {
     btn.textContent = String(s);
     btn.addEventListener("click", () => {
       const anchor = document.querySelector(`[data-anchor="${s}"]`);
-      if (anchor) anchor.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (!anchor) return;
+      const header = document.querySelector(".app-header");
+      const headerOffset = (header?.offsetHeight || 64) + 8; // ヘッダー分 + 少し
+      const y = anchor.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
     });
     bar.appendChild(btn);
   });

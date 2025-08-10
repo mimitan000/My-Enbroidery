@@ -3,7 +3,8 @@
 :root {
   --bg: #CFBAAF;
   --card: #F6E8DD;
-  --ink:  #4b3a33
+  --ink: #4e3e36;
+  --ink-strong: #4b3a33; /* 焦げ茶 */
   --muted: #8d7c71;
   --line: #e1d3c7;
   --pill-bg: #E7D6CB;
@@ -51,18 +52,17 @@ main{ padding:12px 12px 28px;}
   background-blend-mode: soft-light, overlay, normal;
 }
 
-/* info horizontal */
-/* 品番とメーカーを横並び＋間隔拡大 */
+/* info horizontal with spacing and dark brown */
 .info{
   display: flex;
+  flex-direction: row;
   align-items: baseline;
-  gap: 14px; /* ← お好みで 12〜16px 程度 */
+  gap: 14px; /* ← 間隔広げる */
 }
+.info .number{ font-size: 18px; font-weight: 800; letter-spacing: .2px; color: var(--ink-strong); }
+.info .maker { font-size: 12px; color: var(--ink-strong); opacity: .9; }
 
-.info .number{ font-size: 18px; font-weight: 800; letter-spacing: .2px; }
-.info .maker { font-size: 12px; color: var(--muted); }
-
-/* ops default */
+/* ops default (PC) */
 .ops{ display:grid; grid-template-rows:auto auto auto auto; justify-items:center; align-items:center; gap:6px; }
 .ops button{ border:1.5px solid var(--line); background:#fff; padding:6px 10px; border-radius:12px; min-width:40px; }
 .ops .qty{ min-width:18px; color:var(--ink); } .ops .heart{ font-size:18px; background:var(--card); }
@@ -75,7 +75,7 @@ main{ padding:12px 12px 28px;}
 @media (max-width: 480px){
   .row{ display:flex; align-items:center; gap:8px; padding:8px 10px; flex-wrap:nowrap; }
   .swatch{ width:52px; height:38px; border-radius:8px; flex:0 0 52px; }
-  .info{ flex:1 1 auto; min-width:0; }
+  .info{ flex:1 1 auto; min-width:0; gap: 12px; } /* モバイルは少しだけ狭く */
   .info .number{ font-size:16px; }
   .info .maker { font-size:10.5px; }
   .ops{ flex:0 0 auto; display:flex!important; align-items:center; gap:6px; white-space:nowrap; }
