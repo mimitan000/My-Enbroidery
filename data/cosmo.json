@@ -1,1 +1,197 @@
-[{"number": "001", "color": "#ffffff", "owned": 0, "want": false}]
+{
+  "maker": "COSMO",
+  "items": [
+    {
+      "number": "110",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "111",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "112",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "113",
+      "hex": "#3498db"
+    },
+    {
+      "number": "114",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "115",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "116",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "117",
+      "hex": "#16a085"
+    },
+    {
+      "number": "118",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "119",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "120",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "121",
+      "hex": "#3498db"
+    },
+    {
+      "number": "240",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "241",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "242",
+      "hex": "#3498db"
+    },
+    {
+      "number": "243",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "244",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "245",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "246",
+      "hex": "#16a085"
+    },
+    {
+      "number": "247",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "248",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "249",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "250",
+      "hex": "#3498db"
+    },
+    {
+      "number": "251",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "330",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "331",
+      "hex": "#3498db"
+    },
+    {
+      "number": "332",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "333",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "334",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "335",
+      "hex": "#16a085"
+    },
+    {
+      "number": "336",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "337",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "338",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "339",
+      "hex": "#3498db"
+    },
+    {
+      "number": "340",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "341",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "800",
+      "hex": "#3498db"
+    },
+    {
+      "number": "801",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "802",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "803",
+      "hex": "#7f8c8d"
+    },
+    {
+      "number": "804",
+      "hex": "#16a085"
+    },
+    {
+      "number": "805",
+      "hex": "#e74c3c"
+    },
+    {
+      "number": "806",
+      "hex": "#e67e22"
+    },
+    {
+      "number": "807",
+      "hex": "#27ae60"
+    },
+    {
+      "number": "808",
+      "hex": "#3498db"
+    },
+    {
+      "number": "809",
+      "hex": "#9b59b6"
+    },
+    {
+      "number": "810",
+      "hex": "#2c3e50"
+    },
+    {
+      "number": "811",
+      "hex": "#7f8c8d"
+    }
+  ]
+}
