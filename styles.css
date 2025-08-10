@@ -55,3 +55,51 @@ main{ padding:12px 12px 28px;}
 
 .toast{ position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:#3a2f28; color:#fff; padding:10px 14px; border-radius:12px; font-size:14px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+
+/* ---- compact one-line row v3.2.1 ---- */
+
+/* 行のカラム配分：小さめ色見本 / 情報 / 操作 */
+.row{
+  grid-template-columns: 72px 1fr auto; /* ← ここだけで横一列に */
+  padding: 10px 12px;
+  gap: 10px;
+}
+
+/* 色見本を小さく */
+.swatch{
+  width: 64px;
+  height: 44px;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.06),
+    inset -4px -4px 8px rgba(0,0,0,0.05),
+    inset  4px  4px 10px rgba(255,255,255,0.45);
+  background-image:
+    radial-gradient(80px 50px at 70% 30%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
+    conic-gradient(from 210deg, rgba(255,255,255,.08), rgba(0,0,0,.06) 25%, rgba(255,255,255,.08) 50%, rgba(0,0,0,.06) 75%, rgba(255,255,255,.08)),
+    repeating-linear-gradient(140deg, rgba(0,0,0,.045) 0 7px, rgba(0,0,0,0) 7px 14px);
+}
+
+/* 情報の文字を少しだけコンパクトに */
+.info .number{ font-size: 18px; }
+.info .maker{ font-size: 11px; }
+
+/* 右側の操作を縦→横に（＋ → 数 → － → ♥️） */
+.ops{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-template-rows: none; /* 既存指定を無効化 */
+}
+.ops button{
+  min-width: 36px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+.ops .qty{ min-width: 16px; text-align: center; }
+
+/* 行の高さをさらに詰めたい場合はカードの内側余白を微調整 */
+@media (min-width: 960px){
+  .row{ grid-template-columns: 86px 1fr auto; padding: 10px 14px; }
+  .swatch{ width: 78px; height: 50px; }
+}
