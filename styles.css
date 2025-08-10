@@ -181,3 +181,78 @@ body, .app-header, .jumpbar{ background: var(--bg); }
 .yarn::after{
   opacity:.32;  /* 巻き模様を薄めに */
 }
+/* --- Horizontal row layout --- */
+.grid{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row{
+  display: grid;
+  grid-template-columns: 92px 1fr 68px; /* swatch / info / ops */
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+}
+
+/* 左：色見本（角丸の横長） */
+.swatch{
+  width: 92px;
+  height: 64px;
+  border-radius: 14px;
+  background-color: var(--yarn-color, #ccc);
+  box-shadow:
+    inset -6px -6px 10px rgba(0,0,0,0.06),
+    inset  6px  6px 12px rgba(255,255,255,0.45);
+  background-image:
+    radial-gradient(circle at 60% 35%, rgba(255,255,255,0.45), rgba(255,255,255,0) 52%),
+    repeating-linear-gradient(135deg, rgba(0,0,0,0.045) 0 7px, rgba(0,0,0,0) 7px 14px);
+}
+
+/* 中央：番号・メーカー（縦） */
+.info{
+  display: flex; flex-direction: column; gap: 2px;
+}
+.info .number{
+  font-size: 20px; font-weight: 800; letter-spacing: .2px;
+}
+.info .maker{
+  font-size: 12px; color: var(--muted);
+}
+
+/* 右：操作（縦並び） */
+.ops{
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  justify-items: center;
+  align-items: center;
+  gap: 6px;
+}
+.ops button{
+  border: 1.5px solid var(--line);
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 12px;
+  min-width: 40px;
+}
+.ops .heart{ font-size: 18px; background: var(--card); }
+.ops .qty{ min-width: 16px; }
+
+/* セクションアンカーのズレ対策（ジャンプ時） */
+.row .anchor{ position: relative; top: -100px; }
+
+/* タブ：行レイアウトでも隠し忘れなし */
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+.tab-panel:not(.active){ display:none!important; visibility:hidden!important; height:0!important; overflow:hidden!important; }
+
+/* 広い画面での横幅調整 */
+@media (min-width: 960px){
+  .row{ grid-template-columns: 120px 1fr 80px; padding: 12px 16px; }
+  .swatch{ width: 120px; height: 72px; border-radius: 16px; }
+}
