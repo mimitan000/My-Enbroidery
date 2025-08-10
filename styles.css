@@ -2,18 +2,25 @@
 *{box-sizing:border-box}
 :root{--bg:#CFBAAF;--card:#F6E8DD;--ink:#4e3e36;--ink-strong:#4b3a33;--muted:#8d7c71;--line:#e1d3c7;--pill-bg:#E7D6CB}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-rounded,system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",Segoe UI,Roboto,sans-serif}
-.app-header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-.title{display:flex;gap:10px;align-items:center}
-.logo{width:22px;height:22px;border-radius:50%;background:#d7c7b3;position:relative}.logo::after{content:"";position:absolute;right:-8px;top:8px;width:12px;height:2px;background:#b9a692;transform:rotate(20deg);border-radius:2px}
-h1{font-size:22px;margin:0}
-.tabs{display:flex;gap:8px}
-.tab-btn{border:1px solid var(--line);background:#E7D6CB;border-radius:999px;padding:6px 12px}
+.app-header{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.title{display:flex;gap:10px;align-items:flex-start}
+.logo{width:22px;height:22px;border-radius:50%;background:#d7c7b3;position:relative;flex:0 0 22px}
+.logo::after{content:"";position:absolute;right:-8px;top:8px;width:12px;height:2px;background:#b9a692;transform:rotate(20deg);border-radius:2px}
+h1{font-size:28px;line-height:1.0;margin:0;color:var(--ink-strong)}
+h1 span:first-child{letter-spacing:.5px}
+h1 span:last-child{letter-spacing:.5px}
+.ver{color:#7b6a60;margin-left:6px;align-self:flex-start}
+/* equal-size tabs */
+.tabs{display:flex;gap:8px;min-width:160px}
+.tab-btn{flex:1 1 0;border:1px solid var(--line);background:#E7D6CB;border-radius:999px;padding:8px 0;text-align:center;min-width:68px}
+.tab-btn.active{background:#f1dfd3;border-color:#8b7768}
 .tab-panel{display:none}.tab-panel.active{display:block}
+
 main{padding:12px}
 .maker-switch{display:flex;gap:8px;margin:8px 0}
 .maker-switch .maker-btn{border:2px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px}
 .maker-switch .maker-btn.active{border-color:#8b7768;background:#f1dfd3}
-.jumpbar{position:sticky;top:64px;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;white-space:nowrap}
+.jumpbar{position:sticky;top:88px;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;white-space:nowrap}
 .jumpbar .jump{display:inline-flex;align-items:center;justify-content:center;min-width:56px;padding:8px 12px;border:1px solid var(--line);background:var(--card);border-radius:999px}
 .grid{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
@@ -27,5 +34,9 @@ main{padding:12px}
 .diag{font-size:12px;color:#6b584c;margin:4px 0 8px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#3a2f28;color:#fff;padding:8px 12px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
-/* anchor offset */
-.anchor{display:block;height:0;scroll-margin-top:var(--sticky-offset,120px)}
+/* anchor offset so target not hidden */
+.anchor{display:block;height:0;scroll-margin-top: var(--sticky-offset, 120px)}
+@media (max-width:480px){
+  h1{font-size:26px}
+  .info{gap:14px}
+}
