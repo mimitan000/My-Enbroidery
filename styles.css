@@ -1,258 +1,36 @@
-* { box-sizing: border-box; }
-:root {
-  --bg: #F6EEDD;
-  --card: #FFF8EC;
-  --ink: #5c4a3f;
-  --muted: #9b8a7f;
-  --line: #eadfcf;
-  --pill-bg: #f1e6d4;
-  --pill-ink: #6b584c;
-}
 
-html, body { height: 100%; }
-body {
-  margin: 0; font-family: ui-rounded, system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", Segoe UI, Roboto, sans-serif;
-  background: #f8f3e8; color: var(--ink);
-}
-
-.app-header {
-  position: sticky; top: 0; z-index: 10;
-  background: #f8f3e8; border-bottom: 1px solid var(--line);
-  padding: 12px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.title { display: flex; align-items: center; gap: 10px; }
-.logo { width: 22px; height: 22px; border-radius: 50%; background: #d7c7b3; position: relative; }
-.logo::after { content: ""; position: absolute; right: -8px; top: 8px; width: 12px; height: 2px; background: #b9a692; transform: rotate(20deg); border-radius: 2px; }
-h1 { font-size: 22px; margin: 0; letter-spacing: 0.5px; }
-
-.tabs { display: flex; gap: 8px; }
-.tab-btn {
-  border: 1px solid var(--line); background: var(--pill-bg); color: var(--pill-ink);
-  padding: 6px 12px; border-radius: 999px; cursor: pointer;
-}
-.tab-btn.active { background: #e8dcc9; border-color: #bcae9a; }
-
-main { padding: 12px 12px 28px; }
-
-.maker-switch { display: flex; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
-.maker-switch.pill .maker-btn {
-  border: 2px solid var(--line); background: var(--card); color: var(--ink); padding: 8px 14px;
-  border-radius: 999px; cursor: pointer; box-shadow: 0 1px 0 rgba(0,0,0,0.03);
-}
-.maker-switch .maker-btn.active { border-color: #8b7768; background: #f6e7cd; }
-
-.jumpbar {
-  position: sticky; top: 64px; background: #f8f3e8; padding: 8px 0; border-bottom: 1px solid var(--line);
-  display: flex; gap: 8px; overflow-x: auto; white-space: nowrap;
-}
-.jumpbar .jump {
-  border: 1px solid var(--line); background: var(--card); padding: 8px 12px; border-radius: 999px; cursor: pointer; flex: 0 0 auto;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 14px;
-}
-@media (min-width: 720px) { .grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
-@media (min-width: 1040px) { .grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
-
-.card {
-  background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 12px 12px;
-  display: grid; grid-template-rows: auto auto auto auto; justify-items: center; gap: 8px;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
-}
-.anchor { position: relative; top: -100px; }
-
-/* Yarn ball with soft shading; color from --yarn-color */
-.yarn {
-  width: 64px; height: 64px; border-radius: 50%;
-  position: relative;
-  background-color: var(--yarn-color, #c8c8c8);
-  box-shadow: inset -6px -6px 10px rgba(0,0,0,0.08), inset 6px 6px 10px rgba(255,255,255,0.55);
-  background-image:
-    radial-gradient(circle at 50% 38%, rgba(255,255,255,0.5), rgba(255,255,255,0) 45%),
-    repeating-linear-gradient(130deg, rgba(0,0,0,0.06) 0 7px, rgba(0,0,0,0) 7px 14px);
-}
-.yarn::before,
-.yarn::after {
-  content: ""; position: absolute; inset: 0; border-radius: 50%;
-  background:
-    repeating-radial-gradient(circle at 42% 52%, rgba(0,0,0,0.05) 0 6px, rgba(0,0,0,0) 6px 12px);
-  mix-blend-mode: multiply; opacity: .4; pointer-events: none;
-}
-.yarn::after {
-  background: repeating-radial-gradient(circle at 58% 48%, rgba(0,0,0,0.05) 0 6px, rgba(0,0,0,0) 6px 12px);
-  opacity: .3;
-}
-
-.label { color: var(--ink); text-align: center; }
-.number { font-weight: 800; font-size: 18px; }
-.maker { font-size: 12px; color: var(--muted); letter-spacing: 0.3px; }
-
-.controls { display: flex; align-items: center; gap: 10px; }
-.controls button {
-  border: 1.5px solid var(--line); background: #fff; padding: 4px 12px; border-radius: 10px; cursor: pointer; min-width: 36px;
-}
-.controls .heart { font-size: 18px; line-height: 1; background: var(--card); }
-.controls .qty { min-width: 16px; text-align: center; display: inline-block; color: var(--ink); }
-
-/* Toast */
-.toast {
-  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
-  background: #3a2f28; color: #fff; padding: 10px 14px; border-radius: 12px; font-size: 14px;
-  opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
-
-/* Tabs */
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-.tab-panel:not(.active) { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
-/* --- Final polish v3 --- */
-
-/* 1) カラートーン（少し明るく黄み寄り） */
-:root{
-  --bg:   #F7F0DF;
-  --card: #FFF7E8;
-  --ink:  #5b493f;
-  --muted:#9b8a7f;
-  --line: #eadfcf;
-  --pill-bg:#F3E7D5;
-  --pill-ink:#6b584c;
-}
-body, .app-header, .jumpbar{ background: var(--bg); }
-
-/* 2) グリッドとカードの余白・影 */
-.grid{ gap:16px; }
-.card{
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 18px 14px 14px;
-  box-shadow:
-    0 1px 0 rgba(0,0,0,0.03),
-    0 2px 8px rgba(0,0,0,0.02);
-}
-
-/* 3) タイポ（番号を少し大きく／メーカーは控えめ） */
-.number{
-  font-size: 20px;
-  letter-spacing: .2px;
-  font-weight: 800;
-}
-.maker{
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* 4) ボタンのサイズと間隔統一 */
-.controls{ gap:12px; }
-.controls button{
-  min-width:40px;
-  padding:6px 12px;
-  border-radius: 12px;
-  border: 1.5px solid var(--line);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
-}
-.controls .qty{ min-width:18px; }
-
-/* 5) ジャンプバー＆タブ／メーカー切替の視認性UP */
-.jumpbar .jump{
-  padding:10px 14px;
-  border-radius: 999px;
-}
-.tab-btn.active{ background:#EADFC8; border-color:#BCAE9A; }
-.maker-switch .maker-btn.active{ background:#F6E7CD; border-color:#8B7768; }
-
-/* 6) 糸玉の陰影をやわらかく（コントラスト控えめ） */
-.yarn{
-  width:68px; height:68px; border-radius:50%;
-  background-color: var(--yarn-color, #c8c8c8);
-  box-shadow:
-    inset -5px -5px 10px rgba(0,0,0,0.06),
-    inset  6px  6px 12px rgba(255,255,255,0.55);
-  background-image:
-    radial-gradient(circle at 50% 38%, rgba(255,255,255,0.45), rgba(255,255,255,0) 46%),
-    repeating-linear-gradient(130deg, rgba(0,0,0,0.045) 0 7px, rgba(0,0,0,0) 7px 14px);
-}
-.yarn::before,
-.yarn::after{
-  opacity:.32;  /* 巻き模様を薄めに */
-}
-/* --- Horizontal row layout --- */
-.grid{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.row{
-  display: grid;
-  grid-template-columns: 92px 1fr 68px; /* swatch / info / ops */
-  align-items: center;
-  gap: 12px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 10px 12px;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.02);
-}
-
-/* 左：色見本（角丸の横長） */
-.swatch{
-  width: 92px;
-  height: 64px;
-  border-radius: 14px;
-  background-color: var(--yarn-color, #ccc);
-  box-shadow:
-    inset -6px -6px 10px rgba(0,0,0,0.06),
-    inset  6px  6px 12px rgba(255,255,255,0.45);
-  background-image:
-    radial-gradient(circle at 60% 35%, rgba(255,255,255,0.45), rgba(255,255,255,0) 52%),
-    repeating-linear-gradient(135deg, rgba(0,0,0,0.045) 0 7px, rgba(0,0,0,0) 7px 14px);
-}
-
-/* 中央：番号・メーカー（縦） */
-.info{
-  display: flex; flex-direction: column; gap: 2px;
-}
-.info .number{
-  font-size: 20px; font-weight: 800; letter-spacing: .2px;
-}
-.info .maker{
-  font-size: 12px; color: var(--muted);
-}
-
-/* 右：操作（縦並び） */
-.ops{
-  display: grid;
-  grid-template-rows: auto auto auto auto;
-  justify-items: center;
-  align-items: center;
-  gap: 6px;
-}
-.ops button{
-  border: 1.5px solid var(--line);
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 12px;
-  min-width: 40px;
-}
-.ops .heart{ font-size: 18px; background: var(--card); }
-.ops .qty{ min-width: 16px; }
-
-/* セクションアンカーのズレ対策（ジャンプ時） */
-.row .anchor{ position: relative; top: -100px; }
-
-/* タブ：行レイアウトでも隠し忘れなし */
-.tab-panel{ display:none; }
-.tab-panel.active{ display:block; }
-.tab-panel:not(.active){ display:none!important; visibility:hidden!important; height:0!important; overflow:hidden!important; }
-
-/* 広い画面での横幅調整 */
-@media (min-width: 960px){
-  .row{ grid-template-columns: 120px 1fr 80px; padding: 12px 16px; }
-  .swatch{ width: 120px; height: 72px; border-radius: 16px; }
-}
+*{box-sizing:border-box}
+:root{--bg:#F7F0DF;--card:#FFF7E8;--ink:#5b493f;--muted:#9b8a7f;--line:#eadfcf;--pill-bg:#F3E7D5;--pill-ink:#6b584c}
+html,body{height:100%}
+body{margin:0;font-family:ui-rounded,system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+.app-header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.title{display:flex;align-items:center;gap:10px}
+.logo{width:22px;height:22px;border-radius:50%;background:#d7c7b3;position:relative}
+.logo::after{content:"";position:absolute;right:-8px;top:8px;width:12px;height:2px;background:#b9a692;transform:rotate(20deg);border-radius:2px}
+h1{font-size:22px;margin:0;letter-spacing:.5px}
+.tabs{display:flex;gap:8px}
+.tab-btn{border:1px solid var(--line);background:var(--pill-bg);color:var(--pill-ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.tab-btn.active{background:#EADFC8;border-color:#BCAE9A}
+main{padding:12px 12px 28px}
+.maker-switch{display:flex;gap:8px;margin:4px 0 10px;flex-wrap:wrap}
+.maker-switch.pill .maker-btn{border:2px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.maker-switch .maker-btn.active{border-color:#8b7768;background:#F6E7CD}
+.jumpbar{position:sticky;top:64px;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;white-space:nowrap}
+.jumpbar .jump{border:1px solid var(--line);background:var(--card);padding:8px 12px;border-radius:999px;cursor:pointer;flex:0 0 auto}
+.grid{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:100px 1fr 72px;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.row .anchor{position:relative;top:-100px}
+.swatch{width:100px;height:68px;border-radius:14px;background-color:var(--yarn-color,#ccc);box-shadow:inset -5px -5px 10px rgba(0,0,0,.06),inset 6px 6px 12px rgba(255,255,255,.45);background-image:radial-gradient(circle at 60% 35%,rgba(255,255,255,.42),rgba(255,255,255,0) 52%),repeating-linear-gradient(135deg,rgba(0,0,0,.045) 0 7px,rgba(0,0,0,0) 7px 14px)}
+.info{display:flex;flex-direction:column;gap:2px}
+.info .number{font-size:20px;font-weight:800;letter-spacing:.2px}
+.info .maker{font-size:12px;color:var(--muted)}
+.ops{display:grid;grid-template-rows:auto auto auto auto;justify-items:center;align-items:center;gap:6px}
+.ops button{border:1.5px solid var(--line);background:#fff;padding:6px 10px;border-radius:12px;min-width:40px}
+.ops .qty{min-width:18px;color:var(--ink)}
+.ops .heart{font-size:18px;background:var(--card)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.tab-panel:not(.active){display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important}
+@media (min-width:960px){.row{grid-template-columns:140px 1fr 84px;padding:12px 16px}.swatch{width:140px;height:76px;border-radius:16px}}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#3a2f28;color:#fff;padding:10px 14px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}

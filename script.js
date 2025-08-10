@@ -1,3 +1,4 @@
+
 const MAKERS = ["DMC","COSMO","Olympus"];
 const DATA_FILES = {
   DMC: "data/dmc.json",
@@ -65,28 +66,26 @@ async function loadAll() {
 }
 loadAll();
 
-// Utilities: storage keys
+// Storage utils
 const invKey = (m)=>`inventory:${m}`;
 const wishKey = (m)=>`wishlist:${m}`;
-
-function getInventory(m) {
-  return JSON.parse(localStorage.getItem(invKey(m)) || "{}");
-}
-function setInventory(m, obj) {
-  localStorage.setItem(invKey(m), JSON.stringify(obj));
-}
-function getWishlist(m) {
-  return JSON.parse(localStorage.getItem(wishKey(m)) || "[]");
-}
-function setWishlist(m, arr) {
-  localStorage.setItem(wishKey(m), JSON.stringify(arr));
-}
+const getInventory = (m)=> JSON.parse(localStorage.getItem(invKey(m)) || "{}");
+const setInventory = (m, obj)=> localStorage.setItem(invKey(m), JSON.stringify(obj));
+const getWishlist = (m)=> JSON.parse(localStorage.getItem(wishKey(m)) || "[]");
+const setWishlist = (m, arr)=> localStorage.setItem(wishKey(m), JSON.stringify(arr));
 
 function leadingHundreds(numStr) {
   const m = (numStr||"").match(/^\d+/);
   if (!m) return "0";
   const n = parseInt(m[0],10);
   return Math.floor(n/100)*100;
+}
+function sortItems(arr){
+  return arr.slice().sort((a,b)=>{
+    const na = parseInt((a.number.match(/^\d+/)||["0"])[0],10);
+    const nb = parseInt((b.number.match(/^\d+/)||["0"])[0],10);
+    return na-nb || String(a.number).localeCompare(String(b.number));
+  });
 }
 
 function renderJump() {
@@ -110,14 +109,9 @@ function renderList() {
   const list = document.getElementById("list");
   list.innerHTML = "";
   const maker = state.currentMaker;
-  const items = (state.data[maker]||[]).slice().sort((a,b)=>{
-    const na = parseInt((a.number.match(/^\d+/)||["0"])[0],10);
-    const nb = parseInt((b.number.match(/^\d+/)||["0"])[0],10);
-    return na-nb || String(a.number).localeCompare(String(b.number));
-  });
+  const items = sortItems(state.data[maker]||[]);
   const inv = getInventory(maker);
   const wishlist = new Set(getWishlist(maker));
-
   let currentSection = null;
 
   items.forEach(it=>{
@@ -130,8 +124,8 @@ function renderList() {
       anchor.id = `sec-${section}`;
     }
 
-    const yarn = tpl.querySelector(".yarn");
-    yarn.style.setProperty("--yarn-color", it.hex || "#ccc");
+    const swatch = tpl.querySelector(".swatch");
+    swatch.style.setProperty("--yarn-color", it.hex || "#ccc");
 
     tpl.querySelector(".number").textContent = it.number;
     tpl.querySelector(".maker").textContent = maker;
@@ -144,18 +138,18 @@ function renderList() {
     const qty = parseInt(inv[it.number]||0,10);
     qtyEl.textContent = qty;
 
-    minus.addEventListener("click", ()=>{
-      const invNow = getInventory(maker);
-      const cur = parseInt(invNow[it.number]||0,10);
-      const next = Math.max(0, cur-1);
-      invNow[it.number] = next;
-      setInventory(maker, invNow);
-      qtyEl.textContent = next;
-    });
     plus.addEventListener("click", ()=>{
       const invNow = getInventory(maker);
       const cur = parseInt(invNow[it.number]||0,10);
       const next = cur+1;
+      invNow[it.number] = next;
+      setInventory(maker, invNow);
+      qtyEl.textContent = next;
+    });
+    minus.addEventListener("click", ()=>{
+      const invNow = getInventory(maker);
+      const cur = parseInt(invNow[it.number]||0,10);
+      const next = Math.max(0, cur-1);
       invNow[it.number] = next;
       setInventory(maker, invNow);
       qtyEl.textContent = next;
@@ -181,21 +175,15 @@ function renderWishlist(filterMaker="ALL") {
   const makers = filterMaker==="ALL" ? MAKERS : [filterMaker];
 
   makers.forEach(maker=>{
-    const items = state.data[maker]||[];
+    const items = sortItems(state.data[maker]||[]);
     const wished = new Set(getWishlist(maker));
     const inv = getInventory(maker);
 
-    const filtered = items.filter(it=>wished.has(it.number));
-    const sorted = filtered.slice().sort((a,b)=>{
-      const na = parseInt((a.number.match(/^\d+/)||["0"])[0],10);
-      const nb = parseInt((b.number.match(/^\d+/)||["0"])[0],10);
-      return na-nb || String(a.number).localeCompare(String(b.number));
-    });
-
-    sorted.forEach(it=>{
+    items.filter(it=>wished.has(it.number)).forEach(it=>{
       const tpl = document.getElementById("card-template").content.cloneNode(true);
-      const yarn = tpl.querySelector(".yarn");
-      yarn.style.setProperty("--yarn-color", it.hex || "#ccc");
+
+      const swatch = tpl.querySelector(".swatch");
+      swatch.style.setProperty("--yarn-color", it.hex || "#ccc");
 
       tpl.querySelector(".number").textContent = it.number;
       tpl.querySelector(".maker").textContent = maker;
@@ -215,18 +203,18 @@ function renderWishlist(filterMaker="ALL") {
 
       const qty = parseInt(inv[it.number]||0,10);
       qtyEl.textContent = qty;
-      minus.addEventListener("click", ()=>{
-        const invNow = getInventory(maker);
-        const cur = parseInt(invNow[it.number]||0,10);
-        const next = Math.max(0, cur-1);
-        invNow[it.number] = next;
-        setInventory(maker, invNow);
-        qtyEl.textContent = next;
-      });
       plus.addEventListener("click", ()=>{
         const invNow = getInventory(maker);
         const cur = parseInt(invNow[it.number]||0,10);
         const next = cur+1;
+        invNow[it.number] = next;
+        setInventory(maker, invNow);
+        qtyEl.textContent = next;
+      });
+      minus.addEventListener("click", ()=>{
+        const invNow = getInventory(maker);
+        const cur = parseInt(invNow[it.number]||0,10);
+        const next = Math.max(0, cur-1);
         invNow[it.number] = next;
         setInventory(maker, invNow);
         qtyEl.textContent = next;
