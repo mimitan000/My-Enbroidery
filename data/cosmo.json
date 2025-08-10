@@ -7,95 +7,23 @@
     },
     {
       "number": "111",
-      "hex": "#e67e22"
+      "hex": "#e74c3c"
     },
     {
       "number": "112",
-      "hex": "#f1c40f"
+      "hex": "#e74c3c"
     },
     {
       "number": "113",
-      "hex": "#2ecc71"
+      "hex": "#e74c3c"
     },
     {
       "number": "114",
-      "hex": "#3498db"
+      "hex": "#e74c3c"
     },
     {
       "number": "115",
-      "hex": "#9b59b6"
-    },
-    {
-      "number": "116",
-      "hex": "#95a5a6"
-    },
-    {
-      "number": "117",
       "hex": "#e74c3c"
-    },
-    {
-      "number": "118",
-      "hex": "#e67e22"
-    },
-    {
-      "number": "119",
-      "hex": "#f1c40f"
-    },
-    {
-      "number": "120",
-      "hex": "#2ecc71"
-    },
-    {
-      "number": "121",
-      "hex": "#3498db"
-    },
-    {
-      "number": "122",
-      "hex": "#9b59b6"
-    },
-    {
-      "number": "123",
-      "hex": "#95a5a6"
-    },
-    {
-      "number": "124",
-      "hex": "#e74c3c"
-    },
-    {
-      "number": "125",
-      "hex": "#e67e22"
-    },
-    {
-      "number": "126",
-      "hex": "#f1c40f"
-    },
-    {
-      "number": "127",
-      "hex": "#2ecc71"
-    },
-    {
-      "number": "128",
-      "hex": "#3498db"
-    },
-    {
-      "number": "129",
-      "hex": "#9b59b6"
-    },
-    {
-      "number": "130",
-      "hex": "#95a5a6"
-    },
-    {
-      "number": "131",
-      "hex": "#e74c3c"
-    },
-    {
-      "number": "132",
-      "hex": "#e67e22"
-    },
-    {
-      "number": "133",
-      "hex": "#f1c40f"
     }
   ]
 }
