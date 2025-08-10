@@ -1,5 +1,5 @@
 
-console.log("My Embroidery v3.4.2");
+console.log("My Embroidery v3.4.3");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
@@ -8,53 +8,50 @@ const state={currentTab:"inventory",currentMaker:"DMC",data:{}};
 document.addEventListener("DOMContentLoaded",init);
 
 function init(){
-  // Assign embedded data
   MAKERS.forEach(m=> state.data[m]=Array.isArray(EMB_DATA[m])?EMB_DATA[m]:[]);
   bindTabs();
-  renderJump();
-  renderList();
+  renderJump(); renderList();
   updateStickyOffset();
   window.addEventListener("resize", updateStickyOffset, {passive:true});
 
-  // ========= Event delegation for maker buttons (fixes 'stopped working') =========
-  document.addEventListener("click", (ev)=>{
-    const btn = ev.target.closest(".maker-btn");
+  // Maker buttons via event delegation (works in both panels)
+  document.addEventListener("click",(ev)=>{
+    const btn=ev.target.closest(".maker-btn");
     if(!btn) return;
-    const maker = btn.dataset.maker;
-    const panel = btn.closest(".tab-panel");
-    if(!panel) return;
+    const group=btn.closest(".maker-switch");
+    const panel=btn.closest(".tab-panel");
+    if(group) group.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
 
-    // Toggle active within its group
-    const group = btn.closest(".maker-switch");
-    if(group){
-      group.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-    if(panel.id==="inventory"){
-      // Inventory: switch current maker and re-render
-      if(maker){ state.currentMaker = maker; }
-      toast(`${maker} に切り替えました`);
+    if(panel?.id==="inventory"){
+      state.currentMaker=btn.dataset.maker||"DMC";
+      toast(`${state.currentMaker} に切り替えました`);
       renderJump(); renderList(); updateStickyOffset();
-      window.scrollTo({top:0, behavior:"smooth"});
-    }else if(panel.id==="wishlist"){
-      renderWishlist(maker||"ALL");
-      window.scrollTo({top:0, behavior:"smooth"});
+      window.scrollTo({top:0,behavior:"smooth"});
+    }else if(panel?.id==="wishlist"){
+      renderWishlist(btn.dataset.maker||"ALL");
+      window.scrollTo({top:0,behavior:"smooth"});
     }
   });
-  // =========================================================================
 }
 
 function bindTabs(){
   document.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.addEventListener("click",()=>{
+      // Toggle visibility strictly
       document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
       document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
       btn.classList.add("active");
-      document.getElementById(btn.dataset.tab).classList.add("active");
-      state.currentTab=btn.dataset.tab;
-      if(state.currentTab==="inventory"){ renderJump(); renderList(); updateStickyOffset(); }
-      else { renderWishlist(); }
+      const targetId=btn.dataset.tab;
+      document.getElementById(targetId).classList.add("active");
+
+      // Render appropriate view
+      state.currentTab=targetId;
+      if(targetId==="inventory"){
+        renderJump(); renderList(); updateStickyOffset();
+      }else{
+        renderWishlist("ALL");
+      }
       window.scrollTo({top:0,behavior:"smooth"});
     });
   });
@@ -71,7 +68,6 @@ function leadingHundreds(s){
   const m=String(s||"").match(/^\d+/); if(!m) return null;
   const n=parseInt(m[0],10); return Math.floor(n/100)*100;
 }
-
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
     const na=parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
@@ -86,9 +82,7 @@ function renderJump(){
   const sections=[...new Set(items.map(it=>leadingHundreds(it.number)).filter(v=>v!==null))].sort((a,b)=>a-b);
   sections.forEach(s=>{
     const b=document.createElement("button");
-    b.type="button";
-    b.className="jump";
-    b.textContent=String(s);
+    b.type="button"; b.className="jump"; b.textContent=String(s);
     b.addEventListener("click",()=>{
       const a=document.querySelector(`[data-anchor="${s}"]`);
       if(!a) return;
@@ -113,10 +107,7 @@ function renderList(){
     tpl.querySelector(".swatch").style.setProperty("--yarn-color", it.hex||"#ccc");
     tpl.querySelector(".number").textContent=it.number;
     tpl.querySelector(".maker").textContent=maker;
-    const qtyEl=tpl.querySelector(".qty");
-    const plus=tpl.querySelector(".plus");
-    const minus=tpl.querySelector(".minus");
-    const heart=tpl.querySelector(".heart");
+    const qtyEl=tpl.querySelector(".qty"); const plus=tpl.querySelector(".plus"); const minus=tpl.querySelector(".minus"); const heart=tpl.querySelector(".heart");
     let q=parseInt(inv[it.number]||0,10); qtyEl.textContent=q;
     plus.addEventListener("click",()=>{ q+=1; qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
     minus.addEventListener("click",()=>{ q=Math.max(0,q-1); qtyEl.textContent=q; const i=getInventory(maker); i[it.number]=q; setInventory(maker,i); });
@@ -148,18 +139,16 @@ function renderWishlist(filterMaker="ALL"){
       count++;
     });
   });
-  // empty state
-  const empty = document.getElementById("wl-empty");
+  const empty=document.getElementById("wl-empty");
   if(empty) empty.hidden = count>0;
 
-  // update active button in this panel
-  const panel=document.getElementById("wishlist");
-  panel.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
-  const t=[...panel.querySelectorAll(".maker-btn")].find(b=>b.dataset.maker===filterMaker);
-  if(t) t.classList.add("active");
+  // ensure this panel is active
+  document.getElementById("wishlist").classList.add("active");
+  document.getElementById("inventory").classList.remove("active");
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelector('.tab-btn[data-tab="wishlist"]').classList.add("active");
 }
 
-/* storage helpers */
 const invKey=m=>`inventory:${m}`;
 const wishKey=m=>`wishlist:${m}`;
 const getInventory=m=>JSON.parse(localStorage.getItem(invKey(m))||"{}");
@@ -167,5 +156,4 @@ const setInventory=(m,o)=>localStorage.setItem(invKey(m),JSON.stringify(o));
 const getWishlist=m=>JSON.parse(localStorage.getItem(wishKey(m))||"[]");
 const setWishlist=(m,a)=>localStorage.setItem(wishKey(m),JSON.stringify(a));
 
-/* toast */
 function toast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1200); }
