@@ -16,9 +16,9 @@ main{padding:12px}
 .jumpbar{position:sticky;top:64px;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;white-space:nowrap;z-index:9}
 .jumpbar .jump{display:inline-flex;align-items:center;justify-content:center;min-width:56px;padding:8px 12px;border:1px solid var(--line);background:var(--card);border-radius:999px}
 .grid{display:flex;flex-direction:column;gap:10px}
-.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
+.row{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px}
 .swatch{width:52px;height:38px;border-radius:8px;background-color:var(--yarn-color,#ccc);box-shadow:inset 0 0 0 1px rgba(0,0,0,.06), inset -6px -6px 10px rgba(0,0,0,.05), inset 6px 6px 12px rgba(255,255,255,.45), repeating-linear-gradient(140deg, rgba(0,0,0,.05) 0 7px, rgba(0,0,0,0) 7px 14px)}
-.info{display:flex;align-items:baseline;gap:12px;flex:1 1 auto}
+.info{display:flex;align-items:baseline;gap:16px;flex:1 1 auto}
 .info .number{font-size:16px;font-weight:800;color:var(--ink-strong)}
 .info .maker{font-size:11px;color:var(--ink-strong);opacity:.9}
 .ops{display:flex;align-items:center;gap:6px}
@@ -30,3 +30,8 @@ main{padding:12px}
 
 /* anchor offset so it never hides behind sticky header/bar */
 .anchor{display:block;height:0;scroll-margin-top:var(--sticky-offset)}
+
+/* モバイルのときは少し控えめ：12px → 14px */
+@media (max-width: 480px){
+  .info{ gap: 14px; }
+}
