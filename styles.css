@@ -53,15 +53,41 @@ main{ padding:12px 12px 28px;}
 @media (min-width:960px){ .row{ grid-template-columns:160px 1fr 108px; padding:14px 18px; } .swatch{ width:160px; height:84px; border-radius:18px; } }
 
 /* Mobile one-line fix */
+/* ===== Mobile one-line fix (v3.3.1) ===== */
 @media (max-width: 480px){
-  .row{ grid-template-columns:58px 1fr auto; gap:8px; padding:8px 10px; }
-  .swatch{ width:52px; height:38px; border-radius:8px; }
-  .info .number{ font-size:16px; line-height:1.1; }
-  .info .maker{ font-size:10.5px; line-height:1.1; }
-  .ops{ display:flex !important; align-items:center; gap:6px; white-space:nowrap; }
-  .ops button{ min-width:32px; padding:5px 8px; border-radius:9px; }
-  .ops .qty{ min-width:14px; text-align:center; }
-}
+  /* 行全体をフレックス一列に固定 */
+  .row{
+    display: flex;           /* ← GridからFlexへ */
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    flex-wrap: nowrap;
+  }
 
-.toast{ position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:#3a2f28; color:#fff; padding:10px 14px; border-radius:12px; font-size:14px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; }
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+  /* 左：色見本（固定幅） */
+  .swatch{
+    width: 52px;
+    height: 38px;
+    border-radius: 8px;
+    flex: 0 0 52px;          /* 幅を固定 */
+  }
+
+  /* 中央：メーカー・品番（可変） */
+  .info{
+    flex: 1 1 auto;
+    min-width: 0;            /* はみ出し防止 */
+  }
+  .info .number{ font-size: 16px; line-height: 1.1; }
+  .info .maker { font-size: 10.5px; line-height: 1.1; }
+
+  /* 右：操作群（横並び・折り返し禁止） */
+  .ops{
+    flex: 0 0 auto;
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .ops button{ min-width: 30px; padding: 5px 8px; border-radius: 9px; }
+  .ops .qty{ min-width: 14px; text-align: center; }
+}
