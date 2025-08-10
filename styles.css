@@ -106,3 +106,34 @@ main { padding: 12px 12px 28px; }
     repeating-conic-gradient(from 0deg, rgba(0,0,0,0.06) 0 14deg, rgba(0,0,0,0) 14deg 28deg),
     repeating-linear-gradient(135deg, rgba(255,255,255,0.12) 0 8px, rgba(255,255,255,0) 8px 16px);
 }
+
+
+/* v2.2: force-hide inactive panels */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tab-panel:not(.active) { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+
+/* v2.2: yarn ball closer to mock (layered winding arcs) */
+.yarn {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255,255,255,0.55), rgba(255,255,255,0) 45%),
+    repeating-linear-gradient(130deg, rgba(0,0,0,0.06) 0 7px, rgba(0,0,0,0) 7px 14px);
+}
+.yarn::before,
+.yarn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle at 42% 52%, rgba(0,0,0,0.06) 0 6px, rgba(0,0,0,0) 6px 12px);
+  mix-blend-mode: multiply;
+  opacity: .5;
+  pointer-events: none;
+}
+.yarn::after {
+  background:
+    repeating-radial-gradient(circle at 58% 48%, rgba(0,0,0,0.06) 0 6px, rgba(0,0,0,0) 6px 12px);
+  opacity: .35;
+}
