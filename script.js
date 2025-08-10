@@ -1,12 +1,9 @@
 
-console.log("My Embroidery v3.3.3");
+console.log("My Embroidery v3.3.4 (embedded data)");
 
 const MAKERS = ["DMC","COSMO","Olympus"];
-const DATA_FILES = {
-  DMC: "data/dmc.json",
-  COSMO: "data/cosmo.json",
-  Olympus: "data/olymmus.json".replace("mm","m") // tiny trick to ensure path
-};
+// Use embedded data to avoid fetch issues
+const EMB_DATA = window.EMB_DATA || {DMC:[], COSMO:[], Olympus:[]};
 
 const state = {
   currentTab: "inventory",
@@ -14,7 +11,6 @@ const state = {
   data: {},
 };
 
-// Tabs
 document.querySelectorAll(".tab-btn").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
@@ -22,18 +18,12 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
     btn.classList.add("active");
     document.getElementById(btn.dataset.tab).classList.add("active");
     state.currentTab = btn.dataset.tab;
-    if (state.currentTab === "inventory") {
-      renderJump();
-      renderList();
-      window.scrollTo({top:0, behavior:"smooth"});
-    } else {
-      renderWishlist();
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
+    if (state.currentTab === "inventory") { renderJump(); renderList(); }
+    else { renderWishlist(); }
+    window.scrollTo({top:0, behavior:"smooth"});
   });
 });
 
-// Maker switch
 function bindMakerSwitch(scope=document) {
   scope.querySelectorAll(".maker-btn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
@@ -43,30 +33,20 @@ function bindMakerSwitch(scope=document) {
       if (state.currentTab === "inventory") {
         state.currentMaker = maker;
         showToast(`${maker} に切り替えました`);
-        renderJump();
-        renderList();
-        window.scrollTo({top:0, behavior:"smooth"});
+        renderJump(); renderList(); window.scrollTo({top:0, behavior:"smooth"});
       } else {
-        renderWishlist(maker);
-        showToast(`欲しい物を ${maker} で表示`);
-        window.scrollTo({top:0, behavior:"smooth"});
+        renderWishlist(maker); showToast(`欲しい物を ${maker} で表示`); window.scrollTo({top:0, behavior:"smooth"});
       }
     });
   });
 }
 bindMakerSwitch(document);
 
-// Load data
-async function loadAll() {
-  for (const m of MAKERS) {
-    const res = await fetch(DATA_FILES[m]);
-    const json = await res.json();
-    state.data[m] = json.items || [];
-  }
-  renderJump();
-  renderList();
-}
-loadAll();
+// Load: just assign embedded data
+(function init(){
+  MAKERS.forEach(m => state.data[m] = EMB_DATA[m] || []);
+  renderJump(); renderList();
+})();
 
 const invKey = (m)=>`inventory:${m}`;
 const wishKey = (m)=>`wishlist:${m}`;
@@ -103,7 +83,7 @@ function renderJump() {
       const anchor = document.querySelector(`[data-anchor="${s}"]`);
       if (!anchor) return;
       const header = document.querySelector(".app-header");
-      const headerOffset = (header?.offsetHeight || 64) + 8; // ヘッダー分 + 少し
+      const headerOffset = (header?.offsetHeight || 64) + 8;
       const y = anchor.getBoundingClientRect().top + window.pageYOffset - headerOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     });
