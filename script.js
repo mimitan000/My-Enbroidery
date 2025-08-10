@@ -1,15 +1,16 @@
 
-console.log("My Embroidery v3.3.4 (embedded data)");
+console.log("My Embroidery v3.3.5 (diag)");
 
 const MAKERS = ["DMC","COSMO","Olympus"];
-// Use embedded data to avoid fetch issues
 const EMB_DATA = window.EMB_DATA || {DMC:[], COSMO:[], Olympus:[]};
 
-const state = {
-  currentTab: "inventory",
-  currentMaker: "DMC",
-  data: {},
-};
+const state = { currentTab:"inventory", currentMaker:"DMC", data:{} };
+
+function updateDiag(){
+  const d = document.getElementById("diag");
+  const items = state.data[state.currentMaker] || [];
+  d.textContent = `maker=${state.currentMaker} / items=${items.length}`;
+}
 
 document.querySelectorAll(".tab-btn").forEach(btn=>{
   btn.addEventListener("click", ()=>{
@@ -24,28 +25,28 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
   });
 });
 
-function bindMakerSwitch(scope=document) {
+function bindMakerSwitch(scope=document){
   scope.querySelectorAll(".maker-btn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       btn.parentElement.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
       btn.classList.add("active");
       const maker = btn.dataset.maker;
-      if (state.currentTab === "inventory") {
+      if(state.currentTab==="inventory"){
         state.currentMaker = maker;
         showToast(`${maker} に切り替えました`);
-        renderJump(); renderList(); window.scrollTo({top:0, behavior:"smooth"});
-      } else {
-        renderWishlist(maker); showToast(`欲しい物を ${maker} で表示`); window.scrollTo({top:0, behavior:"smooth"});
+        renderJump(); renderList();
+      }else{
+        renderWishlist(maker);
       }
     });
   });
 }
 bindMakerSwitch(document);
 
-// Load: just assign embedded data
+// init data
 (function init(){
-  MAKERS.forEach(m => state.data[m] = EMB_DATA[m] || []);
-  renderJump(); renderList();
+  MAKERS.forEach(m=> state.data[m] = (EMB_DATA[m]||[]).filter(it => /\d/.test(String(it.number)) ));
+  renderJump(); renderList(); updateDiag();
 })();
 
 const invKey = (m)=>`inventory:${m}`;
@@ -56,26 +57,25 @@ const getWishlist = (m)=> JSON.parse(localStorage.getItem(wishKey(m)) || "[]");
 const setWishlist = (m, arr)=> localStorage.setItem(wishKey(m), JSON.stringify(arr));
 
 function leadingHundreds(numStr){
-  const m = String(numStr||"").match(/^\\d+/);
-  if (!m) return 0;
+  const m = String(numStr||"").match(/^\d+/);
+  if (!m) return null;
   const n = parseInt(m[0],10);
   return Math.floor(n/100)*100;
 }
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
-    const na = parseInt((String(a.number).match(/^\\d+/)||["0"])[0],10);
-    const nb = parseInt((String(b.number).match(/^\\d+/)||["0"])[0],10);
+    const na = parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
+    const nb = parseInt((String(b.number).match(/^\d+/)||["0"])[0],10);
     return na-nb || String(a.number).localeCompare(String(b.number));
   });
 }
 
-function renderJump() {
+function renderJump(){
   const bar = document.getElementById("jumpbar");
   bar.innerHTML = "";
   const items = state.data[state.currentMaker] || [];
-  const sections = [...new Set(items.map(it => leadingHundreds(it.number)))]
-    .sort((a,b)=>a-b);
-  sections.forEach(s => {
+  const sections = [...new Set(items.map(it => leadingHundreds(it.number)).filter(v=>v!==null))].sort((a,b)=>a-b);
+  sections.forEach(s=>{
     const btn = document.createElement("button");
     btn.className = "jump";
     btn.textContent = String(s);
@@ -92,52 +92,43 @@ function renderJump() {
 }
 
 function renderList(){
-  const list=document.getElementById("list"); list.innerHTML="";
-  const maker=state.currentMaker;
-  const items=sortItems(state.data[maker]||[]);
-  const inv=getInventory(maker);
-  const wishlist=new Set(getWishlist(maker));
-  let currentSection=null;
+  const list = document.getElementById("list");
+  const empty = document.getElementById("empty");
+  list.innerHTML = "";
+  const maker = state.currentMaker;
+  const items = sortItems(state.data[maker]||[]);
+  updateDiag();
+  empty.hidden = items.length > 0;
+  const inv = getInventory(maker);
+  const wishlist = new Set(getWishlist(maker));
+  let currentSection = null;
 
   items.forEach(it=>{
-    const section=leadingHundreds(it.number);
-    const tpl=document.getElementById("card-template").content.cloneNode(true);
-    const anchor=tpl.querySelector(".anchor");
+    const section = leadingHundreds(it.number);
+    const tpl = document.getElementById("card-template").content.cloneNode(true);
+    const anchor = tpl.querySelector(".anchor");
     if(section!==currentSection){ currentSection=section; anchor.setAttribute("data-anchor", section); anchor.id=`sec-${section}`; }
-
-    const swatch=tpl.querySelector(".swatch");
+    const swatch = tpl.querySelector(".swatch");
     swatch.style.setProperty("--yarn-color", it.hex || "#ccc");
-
-    tpl.querySelector(".number").textContent=it.number;
-    tpl.querySelector(".maker").textContent=maker;
-
-    const qtyEl=tpl.querySelector(".qty");
-    const minus=tpl.querySelector(".minus");
-    const plus=tpl.querySelector(".plus");
-    const heart=tpl.querySelector(".heart");
-
-    const qty=parseInt(inv[it.number]||0,10); qtyEl.textContent=qty;
-
+    tpl.querySelector(".number").textContent = it.number;
+    tpl.querySelector(".maker").textContent = maker;
+    const qtyEl = tpl.querySelector(".qty");
+    const minus = tpl.querySelector(".minus");
+    const plus = tpl.querySelector(".plus");
+    const heart = tpl.querySelector(".heart");
+    const qty = parseInt(inv[it.number]||0,10); qtyEl.textContent = qty;
     plus.addEventListener("click", ()=>{ const invNow=getInventory(maker); const cur=parseInt(invNow[it.number]||0,10); const next=cur+1; invNow[it.number]=next; setInventory(maker, invNow); qtyEl.textContent=next; });
-    minus.addEventListener("click", ()=>{ const invNow=getInventory(maker); const cur=parseInt(invNow[it.number]||0,10); const next=Math.max(0, cur-1); invNow[it.number]=next; setInventory(maker, invNow); qtyEl.textContent=next; });
-
-    const wished=wishlist.has(it.number);
+    minus.addEventListener("click", ()=>{ const invNow=getInventory(maker); const cur=parseInt(invNow[it.number]||0,10); const next=Math.max(0,cur-1); invNow[it.number]=next; setInventory(maker, invNow); qtyEl.textContent=next; });
+    const wished = wishlist.has(it.number);
     heart.textContent = wished ? "♥️" : "♡";
-    heart.addEventListener("click", ()=>{
-      const arr=new Set(getWishlist(maker));
-      if(arr.has(it.number)) arr.delete(it.number); else arr.add(it.number);
-      setWishlist(maker, Array.from(arr));
-      heart.textContent = arr.has(it.number) ? "♥️" : "♡";
-    });
-
+    heart.addEventListener("click", ()=>{ const arr=new Set(getWishlist(maker)); if(arr.has(it.number))arr.delete(it.number); else arr.add(it.number); setWishlist(maker, Array.from(arr)); heart.textContent = arr.has(it.number) ? "♥️" : "♡"; });
     list.appendChild(tpl);
   });
 }
 
 function renderWishlist(filterMaker="ALL"){
   const box=document.getElementById("wishlist-list"); box.innerHTML="";
-  const makers=filterMaker==="ALL" ? MAKERS : [filterMaker];
-
+  const makers=filterMaker==="ALL"?MAKERS:[filterMaker];
   makers.forEach(maker=>{
     const items=sortItems(state.data[maker]||[]);
     const wished=new Set(getWishlist(maker));
@@ -160,11 +151,10 @@ function renderWishlist(filterMaker="ALL"){
       box.appendChild(tpl);
     });
   });
-
   const panel=document.getElementById("wishlist");
   panel.querySelectorAll(".maker-btn").forEach(btn=>btn.classList.remove("active"));
   const target=Array.from(panel.querySelectorAll(".maker-btn")).find(b=>b.dataset.maker===filterMaker);
   if(target) target.classList.add("active");
 }
 
-function showToast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"), 1300); }
+function showToast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),1300); }
