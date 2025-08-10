@@ -1,5 +1,5 @@
 
-console.log("My Embroidery v3.2");
+console.log("My Embroidery v3.3");
 
 const MAKERS = ["DMC","COSMO","Olympus"];
 const DATA_FILES = {
