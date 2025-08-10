@@ -1,0 +1,57 @@
+
+* { box-sizing: border-box; }
+:root {
+  --bg: #CFBAAF;
+  --card: #F6E8DD;
+  --ink: #4e3e36;
+  --muted: #8d7c71;
+  --line: #e1d3c7;
+  --pill-bg: #E7D6CB;
+  --pill-ink: #6b584c;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: ui-rounded, system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+.app-header{ position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); padding: 12px 16px; display:flex; align-items:center; justify-content:space-between;}
+.title{ display:flex; align-items:center; gap:10px; } .title .ver{ color:var(--muted); font-size:12px; margin-left:6px; }
+.logo{ width:22px; height:22px; border-radius:50%; background:#d7c7b3; position:relative;} .logo::after{ content:""; position:absolute; right:-8px; top:8px; width:12px; height:2px; background:#b9a692; transform:rotate(20deg); border-radius:2px;}
+h1{font-size:22px; margin:0; letter-spacing:.5px}
+.tabs{display:flex; gap:8px}
+.tab-btn{border:1px solid var(--line); background:var(--pill-bg); color:var(--pill-ink); padding:6px 12px; border-radius:999px; cursor:pointer;}
+.tab-btn.active{ background:#E4D2C6; border-color:#BCAE9A; }
+main{ padding:12px 12px 28px;}
+.maker-switch{display:flex; gap:8px; margin:4px 0 10px; flex-wrap:wrap;}
+.maker-switch.pill .maker-btn{ border:2px solid var(--line); background:var(--card); color:var(--ink); padding:8px 14px; border-radius:999px; cursor:pointer; box-shadow:0 1px 0 rgba(0,0,0,.03); }
+.maker-switch .maker-btn.active{ border-color:#8b7768; background:#f1dfd3; }
+.jumpbar{ position:sticky; top:64px; background:var(--bg); padding:8px 0; border-bottom:1px solid var(--line); display:flex; gap:8px; overflow-x:auto; white-space:nowrap;}
+.jumpbar .jump{ border:1px solid var(--line); background:var(--card); padding:8px 12px; border-radius:999px; cursor:pointer; flex:0 0 auto; }
+
+.grid{ display:flex; flex-direction:column; gap:10px; }
+.row{ display:grid; grid-template-columns:112px 1fr 78px; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:12px 14px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+.row .anchor{ position:relative; top:-100px; }
+
+/* refined swatch */
+.swatch{
+  width:112px; height:72px; border-radius:16px;
+  background-color:var(--yarn-color,#ccc);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06), inset -6px -6px 10px rgba(0,0,0,.05), inset 6px 6px 12px rgba(255,255,255,.45);
+  background-image:
+    radial-gradient(120px 80px at 70% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 55%),
+    conic-gradient(from 210deg, rgba(255,255,255,.1), rgba(0,0,0,.08) 25%, rgba(255,255,255,.1) 50%, rgba(0,0,0,.08) 75%, rgba(255,255,255,.1)),
+    repeating-linear-gradient(140deg, rgba(0,0,0,.05) 0 7px, rgba(0,0,0,0) 7px 14px);
+  background-blend-mode: soft-light, overlay, normal;
+}
+
+.info{ display:flex; flex-direction:column; gap:2px; }
+.info .number{ font-size:20px; font-weight:800; letter-spacing:.2px; }
+.info .maker{ font-size:12px; color:var(--muted); }
+
+.ops{ display:grid; grid-template-rows:auto auto auto auto; justify-items:center; align-items:center; gap:6px; }
+.ops button{ border:1.5px solid var(--line); background:#fff; padding:6px 10px; border-radius:12px; min-width:40px; }
+.ops .qty{ min-width:18px; color:var(--ink); } .ops .heart{ font-size:18px; background:var(--card); }
+
+.tab-panel{ display:none; } .tab-panel.active{ display:block; } .tab-panel:not(.active){ display:none!important; visibility:hidden!important; height:0!important; overflow:hidden!important; }
+
+@media (min-width:960px){ .row{ grid-template-columns:160px 1fr 92px; padding:14px 18px; } .swatch{ width:160px; height:84px; border-radius:18px; } }
+
+.toast{ position:fixed; left:50%; bottom:20px; transform:translateX(-50%); background:#3a2f28; color:#fff; padding:10px 14px; border-radius:12px; font-size:14px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; }
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
