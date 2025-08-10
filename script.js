@@ -16,20 +16,15 @@ const state = {
 
 // Tabs
 document.querySelectorAll(".tab-btn").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-    document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.tab).classList.add("active");
-    state.currentTab = btn.dataset.tab;
-    if (state.currentTab === "inventory") {
-      renderJump();
-      renderList();
-      window.scrollTo({top:0, behavior:"smooth"});
-    } else {
-      renderWishlist();
-      window.scrollTo({top:0, behavior:"smooth"});
-    }
+ btn.addEventListener("click", () => {
+  const anchor = document.querySelector(`[data-anchor="${s}"]`);
+  if (!anchor) return;
+  const header = document.querySelector(".app-header");
+  const headerOffset = (header?.offsetHeight || 64) + 8; // ヘッダー分+少し
+  const y = anchor.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+  window.scrollTo({ top: y, behavior: "smooth" });
+});
+
   });
 });
 
