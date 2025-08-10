@@ -1,6 +1,16 @@
 
 console.log("My Embroidery v3.3.6");
 
+// 追加：sticky総高さを計算してCSS変数に反映
+function updateStickyOffset(){
+  const header = document.querySelector(".app-header");
+  const bar = document.getElementById("jumpbar");
+  const offset =
+    (header?.offsetHeight || 0) +
+    (bar?.offsetHeight || 0) + 8; // 少し余裕
+  document.documentElement.style.setProperty("--sticky-offset", offset + "px");
+}
+
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
 const state={currentTab:"inventory",currentMaker:"DMC",data:{}};
