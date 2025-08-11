@@ -1,4 +1,9 @@
 {
   "maker": "Olympus",
-  "items": []
+  "items": [
+    {
+      "number": "120",
+      "hex": "#BE2A20"
+    }
+  ]
 }

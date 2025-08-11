@@ -1,5 +1,5 @@
 
-// v3.7.3 - mobile compact + jump preset + sticky offset fix
+// v3.7.4 - compact row size like v3.5.0 + jump preset
 const MAKERS = ["DMC","COSMO","Olympus"];
 const state = { currentTab:"inventory", currentMaker:"DMC", data:{}, inv:{}, wish:{} };
 
@@ -9,75 +9,53 @@ const JUMP_PRESET = {
   Olympus:[100,200,300,700,900]
 };
 
-// ---- Storage
 const LS_INV="emb_inv_v1"; const LS_WISH="emb_wish_v1";
-function loadStore(){
-  try{ state.inv=JSON.parse(localStorage.getItem(LS_INV)||"{}"); }catch{ state.inv={} }
-  try{ state.wish=JSON.parse(localStorage.getItem(LS_WISH)||"{}"); }catch{ state.wish={} }
-}
-function saveStore(){
-  localStorage.setItem(LS_INV, JSON.stringify(state.inv));
-  localStorage.setItem(LS_WISH, JSON.stringify(state.wish));
-}
+function loadStore(){ try{state.inv=JSON.parse(localStorage.getItem(LS_INV)||"{}")}catch{}; try{state.wish=JSON.parse(localStorage.getItem(LS_WISH)||"{}")}catch{} }
+function saveStore(){ localStorage.setItem(LS_INV, JSON.stringify(state.inv)); localStorage.setItem(LS_WISH, JSON.stringify(state.wish)); }
 
-// ---- Fetch JSON
 async function loadJSON(){
   for(const m of MAKERS){
-    const url = `data/${m}.json?ts=${Date.now()}`;
     try{
-      const res = await fetch(url);
-      const json = await res.json();
-      state.data[m] = Array.isArray(json.items)? json.items : [];
+      const res = await fetch(`data/${m}.json?ts=${Date.now()}`);
+      const j = await res.json(); state.data[m]=Array.isArray(j.items)?j.items:[];
     }catch{ state.data[m]=[]; }
   }
 }
 
-// ---- UI
 function bindTabs(){
   document.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
+    btn.addEventListener("click",()=>{
       document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      state.currentTab = btn.dataset.tab;
+      btn.classList.add("active"); state.currentTab=btn.dataset.tab;
       renderJump(); renderList(); window.scrollTo({top:0,behavior:"smooth"});
     });
   });
   document.querySelectorAll(".maker-btn").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
+    btn.addEventListener("click",()=>{
       document.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      state.currentMaker = btn.dataset.maker;
+      btn.classList.add("active"); state.currentMaker=btn.dataset.maker;
       renderJump(); renderList(); window.scrollTo({top:0,behavior:"smooth"});
     });
   });
 }
 
-// ---- Jump
-function leadingHundreds(s){
-  const m = String(s||"").match(/^\d+/);
-  if(!m) return null;
-  const n = parseInt(m[0],10);
-  return Math.floor(n/100)*100;
-}
+function leadingHundreds(s){ const m=String(s||"").match(/^\d+/); if(!m) return null; const n=parseInt(m[0],10); return Math.floor(n/100)*100; }
 function renderJump(){
-  const bar = document.getElementById("jumpbar"); bar.innerHTML="";
-  const maker = state.currentMaker;
-  const items = state.data[maker]||[];
-  const fromData = [...new Set(items.map(it=>leadingHundreds(it.number)).filter(v=>v!=null))].sort((a,b)=>a-b);
-  const use = (fromData.length>=3)? fromData : (JUMP_PRESET[maker]||fromData);
-  use.forEach(g=>{
-    const b=document.createElement("button"); b.className="jump"; b.textContent = g===0?"0":String(g);
-    b.addEventListener("click", ()=>{ const a=document.querySelector(`[data-anchor="${g}"]`); if(a) a.scrollIntoView({behavior:"smooth",block:"start"}); });
+  const bar=document.getElementById("jumpbar"); bar.innerHTML="";
+  const maker=state.currentMaker; const items=state.data[maker]||[];
+  const fromData=[...new Set(items.map(it=>leadingHundreds(it.number)).filter(v=>v!=null))].sort((a,b)=>a-b);
+  const use=(fromData.length>=3)? fromData : (JUMP_PRESET[maker]||fromData);
+  use.forEach(g=>{ const b=document.createElement("button"); b.className="jump"; b.textContent=g===0?"0":String(g);
+    b.addEventListener("click",()=>{ const a=document.querySelector(`[data-anchor="${g}"]`); if(a) a.scrollIntoView({behavior:"smooth",block:"start"}); });
     bar.appendChild(b);
   });
-  bar.scrollLeft=0;
+  bar.scrollLeft=0; setOffset();
 }
 
-// ---- List
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
-    const na = parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
-    const nb = parseInt((String(b.number).match(/^\d+/)||["0"])[0],10);
+    const na=parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
+    const nb=parseInt((String(b.number).match(/^\d+/)||["0"])[0],10);
     return na-nb || String(a.number).localeCompare(String(b.number));
   });
 }
@@ -88,13 +66,12 @@ function renderList(){
   items.forEach(it=>{
     const sec=leadingHundreds(it.number);
     if(sec!==current){ current=sec; const anchor=document.createElement("div"); anchor.setAttribute("data-anchor", String(sec)); anchor.style.height="1px"; list.appendChild(anchor); }
-    list.appendChild(row(it, maker));
+    list.appendChild(row(it,maker));
   });
-  // ensure anchor offset
   setOffset();
 }
 function row(it, maker){
-  const invKey=`${maker}:${it.number}`; const wishKey=invKey;
+  const invKey=`${maker}:${it.number}`, wishKey=invKey;
   const wrap=document.createElement("div"); wrap.className="row";
   const sw=document.createElement("div"); sw.className="swatch"; sw.style.background=it.hex||"#fff";
   const meta=document.createElement("div"); meta.className="meta";
@@ -105,32 +82,23 @@ function row(it, maker){
   if(state.wish[wishKey]) heart.textContent="❤️";
   plus.addEventListener("click",()=>{ state.inv[invKey]=(state.inv[invKey]||0)+1; num.textContent=state.inv[invKey]; saveStore(); });
   minus.addEventListener("click",()=>{ state.inv[invKey]=Math.max(0,(state.inv[invKey]||0)-1); num.textContent=state.inv[invKey]; saveStore(); });
-  heart.addEventListener("click",()=>{ state.wish[wishKey]=!state.wish[wishKey]; heart.textContent=state.wish[wishKey]?"❤️":"♡"; saveStore(); if(state.currentTab==="wishlist") wrap.remove(); });
-  ctrl.append(plus,num,minus,heart);
-  wrap.append(sw,meta,ctrl);
+  heart.addEventListener("click",()=>{ state.wish[wishKey]=!state.wish[wishKey]; heart.textContent=state.wish[wishKey]?"❤️":"♡"; saveStore(); if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.remove(); });
+  ctrl.append(plus,num,minus,heart); wrap.append(sw,meta,ctrl);
   if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.style.display="none";
   return wrap;
 }
 function btn(t){ const b=document.createElement("button"); b.className="icon"; b.textContent=t; return b; }
 
-// ---- CSV import / JSON export
 function parseCSV(text){
-  const lines=text.split(/\r?\n/).filter(Boolean);
+  const lines=text.split(/\\r?\\n/).filter(Boolean);
   const header=lines.shift().split(",");
   const idxN=header.findIndex(h=>/number/i.test(h));
   const idxH=header.findIndex(h=>/^hex$/i.test(h));
   const items=[];
-  for(const line of lines){
-    const cols=line.split(",");
-    const number=(cols[idxN]||"").trim();
-    const hex=(cols[idxH]||"").trim();
-    if(number) items.push({number,hex});
-  }
+  lines.forEach(line=>{ const cols=line.split(","); const number=(cols[idxN]||"").trim(); const hex=(cols[idxH]||"").trim(); if(number) items.push({number,hex}); });
   return items;
 }
-function blobDownload(name, text){
-  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"text/plain"})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
-}
+function blobDownload(name, text){ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"text/plain"})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1200); }
 function bindTools(){
   const file=document.getElementById("fileInput");
   document.getElementById("importBtn").addEventListener("click",()=>file.click());
@@ -145,22 +113,18 @@ function bindTools(){
   });
   document.getElementById("exportBtn").addEventListener("click",()=>{
     const maker=state.currentMaker; const items=state.data[maker]||[];
-    const json=JSON.stringify({maker,items},null,2);
-    blobDownload(`${maker}.json`, json);
+    blobDownload(`${maker}.json`, JSON.stringify({maker,items},null,2));
   });
 }
 
-// ---- sticky offset
 function setOffset(){
-  const header=document.querySelector(".app-header");
-  const jump=document.getElementById("jumpbar");
-  const offset=(header?.offsetHeight||0)+(jump?.offsetHeight||0)+6;
+  const header=document.querySelector(".app-header"); const jump=document.getElementById("jumpbar");
+  const offset=(header?.offsetHeight||0)+(jump?.offsetHeight||0)+4;
   document.documentElement.style.setProperty("--sticky-offset", offset+"px");
-  document.querySelectorAll('[data-anchor]').forEach(a=>{ a.style.scrollMarginTop=`var(--sticky-offset)`; });
+  document.querySelectorAll('[data-anchor]').forEach(a=>a.style.scrollMarginTop=`var(--sticky-offset)`);
 }
 window.addEventListener("resize", ()=>setOffset(), {passive:true});
 
-// ---- init
 (async function init(){
   loadStore(); bindTabs(); bindTools(); await loadJSON(); renderJump(); renderList(); setOffset();
 })();
