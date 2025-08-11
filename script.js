@@ -1,5 +1,5 @@
 
-console.log("My Embroidery v3.5.0 (DMC full from CSV)");
+console.log("My Embroidery v3.6.1 (CSV importer)");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
@@ -9,12 +9,34 @@ document.addEventListener("DOMContentLoaded",init);
 
 function init(){
   MAKERS.forEach(m=> state.data[m]=Array.isArray(EMB_DATA[m])?EMB_DATA[m]:[]);
+  loadCSVPersisted();
+
   bindTabs();
+  bindGlobalClicks();
+  bindImporter();
+
   renderJump(); renderList();
   updateStickyOffset();
   window.addEventListener("resize", updateStickyOffset, {passive:true});
+}
 
-  // Maker buttons via event delegation
+function bindTabs(){
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      const id=btn.dataset.tab;
+      document.getElementById(id).classList.add("active");
+      state.currentTab=id;
+      if(id==="inventory"){ renderJump(); renderList(); updateStickyOffset(); }
+      else{ renderWishlist("ALL"); }
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+  });
+}
+
+function bindGlobalClicks(){
   document.addEventListener("click",(ev)=>{
     const btn=ev.target.closest(".maker-btn");
     if(!btn) return;
@@ -22,7 +44,6 @@ function init(){
     const panel=btn.closest(".tab-panel");
     if(group) group.querySelectorAll(".maker-btn").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
-
     if(panel?.id==="inventory"){
       state.currentMaker=btn.dataset.maker||"DMC";
       toast(`${state.currentMaker} に切り替えました`);
@@ -35,19 +56,65 @@ function init(){
   });
 }
 
-function bindTabs(){
-  document.querySelectorAll(".tab-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-      document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
-      btn.classList.add("active");
-      const targetId=btn.dataset.tab;
-      document.getElementById(targetId).classList.add("active");
-      state.currentTab=targetId;
-      if(targetId==="inventory"){ renderJump(); renderList(); updateStickyOffset(); }
+function bindImporter(){
+  const modal=document.getElementById("importer");
+  const openBtn=document.getElementById("openImporter");
+  const closeBtn=document.getElementById("closeImporter");
+  const runBtn=document.getElementById("runImport");
+  function show(){ modal.classList.add("show"); modal.setAttribute("aria-hidden","false"); }
+  function hide(){ modal.classList.remove("show"); modal.setAttribute("aria-hidden","true"); }
+  openBtn?.addEventListener("click", show);
+  closeBtn?.addEventListener("click", hide);
+  modal.querySelector(".modal-backdrop")?.addEventListener("click", hide);
+  runBtn?.addEventListener("click", async ()=>{
+    const files={ DMC:csvFile("csvDMC"), COSMO:csvFile("csvCOSMO"), Olympus:csvFile("csvOlympus") };
+    let imported=[];
+    for(const m of MAKERS){
+      if(files[m]){
+        const text=await files[m].text();
+        const items=parseCSV(text);
+        if(items.length){
+          state.data[m]=items;
+          localStorage.setItem(csvKey(m), JSON.stringify(items));
+          imported.push(m);
+        }
+      }
+    }
+    if(imported.length){
+      toast(imported.join(", ")+" を取り込みました");
+      if(state.currentTab==="inventory"){ renderJump(); renderList(); updateStickyOffset(); }
       else { renderWishlist("ALL"); }
-      window.scrollTo({top:0,behavior:"smooth"});
-    });
+    }else{
+      toast("CSVが選択されていません");
+    }
+    hide();
+  });
+  function csvFile(id){ const el=document.getElementById(id); return el && el.files && el.files[0]; }
+}
+
+function parseCSV(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim().length>0);
+  if(!lines.length) return [];
+  let start=0;
+  const header=lines[0].split(",").map(h=>h.trim().toLowerCase());
+  if(header.includes("number")||header.includes("hex")) start=1;
+  const items=[];
+  for(let i=start;i<lines.length;i++){
+    const cols=lines[i].split(",");
+    const number=(cols[0]||"").trim().replace(/^"(.+)"$/,"$1");
+    const hex=((cols[1]||"").trim().replace(/^"(.+)"$/,"$1")||"").toUpperCase();
+    if(!number) continue;
+    const hexNorm=hex? (hex.startsWith("#")?hex:"#"+hex):"";
+    if(/\d/.test(number)){ items.push({number:String(number), hex:hexNorm}); }
+  }
+  return sortItems(items);
+}
+
+function csvKey(m){ return `csvdata:${m}`; }
+function loadCSVPersisted(){
+  MAKERS.forEach(m=>{
+    const s=localStorage.getItem(csvKey(m));
+    if(s){ try{ const arr=JSON.parse(s); if(Array.isArray(arr)) state.data[m]=arr; }catch(e){} }
   });
 }
 
@@ -59,15 +126,13 @@ function updateStickyOffset(){
 }
 
 function leadingHundreds(s){
-  const m=String(s||"").match(/^\d+/);
-  if(!m) return null;
-  const n=parseInt(m[0],10);
-  return Math.floor(n/100)*100;
+  const m=String(s||"").match(/^\\d+/); if(!m) return null;
+  const n=parseInt(m[0],10); return Math.floor(n/100)*100;
 }
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
-    const na=parseInt((String(a.number).match(/^\d+/)||["0"])[0],10);
-    const nb=parseInt((String(b.number).match(/^\d+/)||["0"])[0],10);
+    const na=parseInt((String(a.number).match(/^\\d+/)||["0"])[0],10);
+    const nb=parseInt((String(b.number).match(/^\\d+/)||["0"])[0],10);
     return na-nb||String(a.number).localeCompare(String(b.number));
   });
 }
@@ -138,7 +203,6 @@ function renderWishlist(filterMaker="ALL"){
   const empty=document.getElementById("wl-empty");
   if(empty) empty.hidden = count>0;
 
-  // switch tab visually to wishlist (for direct calls)
   document.getElementById("wishlist").classList.add("active");
   document.getElementById("inventory").classList.remove("active");
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
