@@ -4,18 +4,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Embroidery</title>
-  <link rel="stylesheet" href="styles.css?v=3.7.1" />
+  <link rel="stylesheet" href="styles.css?v=3.7.2" />
 </head>
 <body>
   <div class="app">
-    <header class="app-header" id="appHeader">
+    <header class="app-header" id="header">
       <div class="topbar">
-        <div class="logo"><h1>My <span style="font-weight:800">Embroidery</span></h1><span class="version">v3.7.1</span></div>
+        <div class="logo"><h1>My<br>Embroidery</h1><span class="version">v3.7.2</span></div>
         <div class="tabs">
           <button class="tab-btn active" data-tab="inventory">在庫</button>
           <button class="tab-btn" data-tab="wishlist">♥️</button>
-          <button id="importBtn" class="tool-btn">データ取込（CSV）</button>
-          <button id="exportBtn" class="tool-btn">JSONを書き出す</button>
+          <div class="tools">
+            <button id="importBtn" class="tool-btn">データ取込（CSV）</button>
+            <button id="exportBtn" class="tool-btn">JSONを書き出す</button>
+          </div>
         </div>
       </div>
       <div class="maker-switch">
@@ -31,6 +33,7 @@
   </div>
 
   <input type="file" id="fileInput" accept=".csv" style="display:none" />
-  <script src="script.js?v=3.7.1"></script>
+
+  <script src="script.js?v=3.7.2"></script>
 </body>
 </html>
