@@ -42,7 +42,6 @@ main{padding:12px}
 .empty{color:#6b584c;padding:16px 8px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#3a2f28;color:#fff;padding:8px 12px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s ease, transform .25s ease}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
-
-/* --- v3.4.5: stronger active border for top tabs --- */
+/* v3.5.0 ensure top tabs style wins */
 .tabs .tab-btn{border-width:2px}
 .tabs .tab-btn.active{border-color:#8b7768 !important;background:#f1dfd3 !important; box-shadow:inset 0 0 0 1px rgba(0,0,0,0.02)}

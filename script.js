@@ -1,5 +1,5 @@
 
-console.log("My Embroidery v3.4.4");
+console.log("My Embroidery v3.5.0 (DMC full from CSV)");
 
 const MAKERS=["DMC","COSMO","Olympus"];
 const EMB_DATA=window.EMB_DATA||{DMC:[],COSMO:[],Olympus:[]};
@@ -59,8 +59,10 @@ function updateStickyOffset(){
 }
 
 function leadingHundreds(s){
-  const m=String(s||"").match(/^\d+/); if(!m) return null;
-  const n=parseInt(m[0],10); return Math.floor(n/100)*100;
+  const m=String(s||"").match(/^\d+/);
+  if(!m) return null;
+  const n=parseInt(m[0],10);
+  return Math.floor(n/100)*100;
 }
 function sortItems(arr){
   return arr.slice().sort((a,b)=>{
@@ -136,7 +138,7 @@ function renderWishlist(filterMaker="ALL"){
   const empty=document.getElementById("wl-empty");
   if(empty) empty.hidden = count>0;
 
-  // ensure panel state is correct (wishlist only)
+  // switch tab visually to wishlist (for direct calls)
   document.getElementById("wishlist").classList.add("active");
   document.getElementById("inventory").classList.remove("active");
   document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
