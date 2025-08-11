@@ -4,21 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Embroidery</title>
-  <link rel="stylesheet" href="styles.css?v=3.7.2" />
+  <link rel="stylesheet" href="styles.css?v=3.7.3" />
 </head>
 <body>
   <div class="app">
-    <header class="app-header" id="header">
-      <div class="topbar">
-        <div class="logo"><h1>My<br>Embroidery</h1><span class="version">v3.7.2</span></div>
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="inventory">在庫</button>
-          <button class="tab-btn" data-tab="wishlist">♥️</button>
-          <div class="tools">
-            <button id="importBtn" class="tool-btn">データ取込（CSV）</button>
-            <button id="exportBtn" class="tool-btn">JSONを書き出す</button>
-          </div>
-        </div>
+    <header class="app-header">
+      <div class="logo">
+        <h1>My Embroidery</h1><span class="version">v3.7.3</span>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="inventory">在庫</button>
+        <button class="tab-btn" data-tab="wishlist">♥️</button>
+        <button id="importBtn" class="tool-btn">データ取込（CSV）</button>
+        <button id="exportBtn" class="tool-btn">JSONを書き出す</button>
       </div>
       <div class="maker-switch">
         <button class="maker-btn active" data-maker="DMC">DMC</button>
@@ -34,6 +32,6 @@
 
   <input type="file" id="fileInput" accept=".csv" style="display:none" />
 
-  <script src="script.js?v=3.7.2"></script>
+  <script src="script.js?v=3.7.3"></script>
 </body>
 </html>
