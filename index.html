@@ -1,87 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Embroidery</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3.7.0" />
 </head>
 <body>
-<header class="app-header">
-  <div class="title">
-    <div class="logo" aria-hidden="true"></div>
-    <h1><span>My</span><br><span>Embroidery</span></h1>
-    <small class="ver">v3.6.1</small>
+  <div class="app">
+    <header class="app-header">
+      <div class="topbar">
+        <div class="logo"><h1>My <span style="font-weight:800">Embroidery</span></h1><span class="version">v3.7.0</span></div>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="inventory">在庫</button>
+          <button class="tab-btn" data-tab="wishlist">♥️</button>
+          <button id="importBtn" class="tool-btn">データ取込（CSV）</button>
+          <button id="exportBtn" class="tool-btn">JSONを書き出す</button>
+        </div>
+      </div>
+      <div class="maker-switch">
+        <button class="maker-btn active" data-maker="DMC">DMC</button>
+        <button class="maker-btn" data-maker="COSMO">COSMO</button>
+        <button class="maker-btn" data-maker="Olympus">Olympus</button>
+      </div>
+    </header>
+
+    <div id="jumpbar" class="jumpbar"></div>
+    <main id="list" class="list" aria-live="polite"></main>
+    <div class="footer-space"></div>
   </div>
-  <nav class="tabs" role="tablist" aria-label="表示切替">
-    <button type="button" class="tab-btn active" data-tab="inventory" role="tab" aria-selected="true">在庫</button>
-    <button type="button" class="tab-btn" data-tab="wishlist" role="tab" aria-selected="false" aria-label="欲しい物">♥️</button>
-  </nav>
-</header>
 
-<main>
-  <div class="toolbar">
-    <button id="openImporter" class="ghost">データ取込（CSV）</button>
-  </div>
+  <input type="file" id="fileInput" accept=".csv" style="display:none" />
 
-  <section id="inventory" class="tab-panel active" role="tabpanel" aria-label="在庫">
-    <div class="maker-switch pill" role="group" aria-label="メーカー">
-      <button type="button" class="maker-btn active" data-maker="DMC">DMC</button>
-      <button type="button" class="maker-btn" data-maker="COSMO">COSMO</button>
-      <button type="button" class="maker-btn" data-maker="Olympus">Olympus</button>
-    </div>
-    <div id="jumpbar" class="jumpbar" aria-label="ジャンプバー"></div>
-    <div id="list" class="grid"></div>
-  </section>
-
-  <section id="wishlist" class="tab-panel" role="tabpanel" aria-label="欲しい物">
-    <div class="maker-switch pill small" role="group" aria-label="メーカー絞り込み">
-      <button type="button" class="maker-btn active" data-maker="ALL">すべて</button>
-      <button type="button" class="maker-btn" data-maker="DMC">DMC</button>
-      <button type="button" class="maker-btn" data-maker="COSMO">COSMO</button>
-      <button type="button" class="maker-btn" data-maker="Olympus">Olympus</button>
-    </div>
-    <div id="wishlist-list" class="grid"></div>
-    <div id="wl-empty" class="empty" hidden>♥️ はまだ空です。糸カードの ♥️ を押すと追加されます。</div>
-  </section>
-</main>
-
-<div id="importer" class="modal" aria-hidden="true">
-  <div class="modal-backdrop"></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="imp-title">
-    <div class="modal-header">
-      <h2 id="imp-title">CSVからデータ取込</h2>
-      <button id="closeImporter" class="icon">✕</button>
-    </div>
-    <div class="modal-body">
-      <p class="muted">CSVは <code>number,hex,memo</code> の列構成を推奨（memoは任意）。</p>
-      <div class="file-row"><label>DMC</label><input type="file" id="csvDMC" accept=".csv"></div>
-      <div class="file-row"><label>COSMO</label><input type="file" id="csvCOSMO" accept=".csv"></div>
-      <div class="file-row"><label>Olympus</label><input type="file" id="csvOlympus" accept=".csv"></div>
-    </div>
-    <div class="modal-footer">
-      <button id="runImport" class="primary">取り込む</button>
-    </div>
-  </div>
-</div>
-
-<div id="toast" class="toast" aria-live="polite"></div>
-
-<template id="card-template">
-  <div class="row">
-    <a class="anchor" aria-hidden="true"></a>
-    <div class="swatch" aria-hidden="true"></div>
-    <div class="info"><div class="number"></div><div class="maker"></div></div>
-    <div class="ops">
-      <button type="button" class="plus" aria-label="所持数を増やす">＋</button>
-      <span class="qty" aria-label="所持数">0</span>
-      <button type="button" class="minus" aria-label="所持数を減らす">－</button>
-      <button type="button" class="heart" aria-label="欲しい物に追加/解除">♡</button>
-    </div>
-  </div>
-</template>
-
-<script>window.EMB_DATA = {"DMC":[],"COSMO":[],"Olympus":[]};</script>
-<script src="script.js"></script>
+  <script src="script.js?v=3.7.0"></script>
 </body>
 </html>

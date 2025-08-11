@@ -1,0 +1,29 @@
+{
+  "maker": "DMC",
+  "items": [
+    {
+      "number": "B5200",
+      "hex": "#FFFFFF"
+    },
+    {
+      "number": "BLANC",
+      "hex": "#FCFCFC"
+    },
+    {
+      "number": "ECRU",
+      "hex": "#E6E2C5"
+    },
+    {
+      "number": "1",
+      "hex": "#7B7E82"
+    },
+    {
+      "number": "2",
+      "hex": "#7D8391"
+    },
+    {
+      "number": "3",
+      "hex": "#A9B0B8"
+    }
+  ]
+}
