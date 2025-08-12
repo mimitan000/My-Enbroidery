@@ -2,24 +2,12 @@
   "maker": "COSMO",
   "items": [
     {
-      "number": "110",
+      "number": "100",
       "hex": "#D44A33"
     },
     {
-      "number": "111",
+      "number": "101",
       "hex": "#DC7A2D"
-    },
-    {
-      "number": "112",
-      "hex": "#E8B01E"
-    },
-    {
-      "number": "113",
-      "hex": "#2FB969"
-    },
-    {
-      "number": "114",
-      "hex": "#2A79BC"
     }
   ]
 }
