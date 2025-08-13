@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Embroidery Data Updater</title>
+<style>
+  :root{ --bg:#f7f3f0; --ink:#3b2f29; --line:#e5d8ce; --card:#ffffff; --accent:#cfbaaf; }
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+  .wrap{max-width:880px;margin:24px auto;padding:0 16px;}
+  h1{font-size:28px;margin:16px 0 8px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+  label{display:block;font-weight:700;margin:8px 0 6px}
+  input[type="file"]{display:block;padding:8px;border:1px dashed var(--line);border-radius:10px;background:#fff;width:100%}
+  .row{display:grid;grid-template-columns:140px 1fr;gap:12px;align-items:center;margin:8px 0}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--accent);color:#332620;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer}
+  .btn.secondary{background:#fff}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;white-space:pre-wrap}
+  .muted{color:#7b6b61}
+  .ok{color:#1e8f47;font-weight:800}
+  .bad{color:#c0392b;font-weight:800}
+  .footer{margin:18px 0 6px;color:#7b6b61;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Embroidery Data Updater</h1>
+  <div class="card">
+    <p class="muted">CSVを選んで「変換」を押すと、アプリ用の <b>DMC.json / COSMO.json / Olympus.json / Anchor.json</b> をダウンロードできます。</p>
+    <div class="grid">
+      <div>
+        <div class="row"><label>DMC.csv</label><input id="dmc" type="file" accept=".csv"></div>
+        <div class="row"><label>COSMO.csv</label><input id="cosmo" type="file" accept=".csv"></div>
+      </div>
+      <div>
+        <div class="row"><label>Olympus.csv</label><input id="olympus" type="file" accept=".csv"></div>
+        <div class="row"><label>Anchor.csv</label><input id="anchor" type="file" accept=".csv"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+      <button class="btn" id="btnConvert">変換（JSONを保存）</button>
+      <button class="btn secondary" id="btnVersion">バージョン付きURLをコピー</button>
+    </div>
+    <div id="status" class="mono" style="margin-top:12px;display:none"></div>
+  </div>
+
+  <div class="card">
+    <h3>使い方</h3>
+    <ol>
+      <li>各メーカーの <b>CSV</b> を選ぶ（DMCだけなど1つでもOK）</li>
+      <li>「<b>変換（JSONを保存）</b>」を押す → 各メーカーの <code>.json</code> がダウンロードされます</li>
+      <li>アプリのリポジトリで <code>/data</code> に <code>DMC.json</code> などを上書きアップロード</li>
+      <li>スマホ/PCで公開URLを <code>?v=YYYYMMDD-HHMM</code> 付きで開く（キャッシュ回避）</li>
+    </ol>
+    <p class="muted">CSVは「番号,HEX」の2列が基本です（ヘッダー無しでもOK）。HEXは <code>#RRGGBB</code>、<code>#RGB</code> も対応（自動で6桁に正規化）。全角＃や全角カンマも吸収します。</p>
+  </div>
+
+  <div class="footer">v1.0 — このHTMLを開くだけでオフライン動作します（追加インストール不要）</div>
+</div>
+
+<script>
+function readFile(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsText(file); }); }
+function normalizeHex(h){
+  if(!h) return "";
+  h = String(h).trim().toUpperCase().replace("＃","#");
+  if(!h.startsWith("#")) h = "#"+h;
+  if(/^#[0-9A-F]{3}$/.test(h)) h = "#"+h[1]+h[1]+h[2]+h[2]+h[3]+h[3];
+  if(!/^#[0-9A-F]{6}$/.test(h)) return "";
+  return h;
+}
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  const items=[];
+  let start=0;
+  if(lines.length && /number/i.test(lines[0]) && /hex/i.test(lines[0])) start=1; // ヘッダ除外
+  for(let i=start;i<lines.length;i++){
+    const ln = lines[i].replace(/，/g, ","); // 全角カンマ→半角
+    let parts = ln.split(/[\t,]/);
+    if(parts.length<2){ // 空白区切り最終手段
+      parts = ln.trim().split(/\s+/);
+    }
+    let number = (parts[0]||"").trim();
+    let hex = normalizeHex(parts[1]||"");
+    if(number && hex) items.push({number, hex});
+  }
+  // 重複除去（同じ番号は最後を優先）
+  const map = new Map();
+  for(const it of items){ map.set(it.number, it.hex); }
+  return Array.from(map, ([number,hex])=>({number,hex}));
+}
+function download(name, text){
+  const a=document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text],{type:"application/json"}));
+  a.download = name;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+function setStatus(html){ const el=document.getElementById("status"); el.style.display="block"; el.innerHTML = html; }
+
+document.getElementById("btnConvert").addEventListener("click", async ()=>{
+  const files = {
+    DMC: document.getElementById("dmc").files[0],
+    COSMO: document.getElementById("cosmo").files[0],
+    Olympus: document.getElementById("olympus").files[0],
+    Anchor: document.getElementById("anchor").files[0],
+  };
+  const results = [];
+  for(const [maker, f] of Object.entries(files)){
+    if(!f) { results.push({maker, count:0, skipped:true}); continue; }
+    try{
+      const txt = await readFile(f);
+      const items = parseCSV(txt);
+      const obj = { maker, items };
+      download(`${maker}.json`, JSON.stringify(obj,null,2));
+      results.push({maker, count:items.length, skipped:false});
+    }catch(e){
+      results.push({maker, count:0, skipped:false, error:String(e)});
+    }
+  }
+  const lines = results.map(r=>{
+    if(r.skipped) return `・${r.maker}: <span class="muted">（未選択・スキップ）</span>`;
+    if(r.error) return `・${r.maker}: <span class="bad">失敗</span> ${r.error}`;
+    return `・${r.maker}: <span class="ok">${r.count}件 変換</span>`;
+  });
+  setStatus(`<b>変換結果</b><br>${lines.join("<br>")}<br><br>ダウンロードされた <code>DMC.json / COSMO.json / Olympus.json / Anchor.json</code> を<br><code>/data</code> に上書きしてください。`);
+});
+
+document.getElementById("btnVersion").addEventListener("click", ()=>{
+  const now = new Date();
+  const v = now.getFullYear().toString().padStart(4,"0")+
+            (now.getMonth()+1).toString().padStart(2,"0")+
+            now.getDate().toString().padStart(2,"0")+"-"+
+            now.getHours().toString().padStart(2,"0")+
+            now.getMinutes().toString().padStart(2,"0");
+  const url = (location.href.includes("?")? location.href.split("?")[0] : location.href) + "?v=" + v;
+  navigator.clipboard.writeText(url).then(()=>{
+    setStatus(`バージョン付きURLをコピーしました：<br><code>${url}</code>`);
+  }).catch(()=>{
+    setStatus(`バージョン付きURL：<br><code>${url}</code><br><span class="muted">※コピーに失敗した場合は手動で選択してコピーしてください。</span>`);
+  });
+});
+</script>
+</body>
+</html>
