@@ -105,10 +105,7 @@ function row(it, maker){
   if (state.currentTab === "wishlist" && !state.wish[wishKey]) wrap.style.display = "none";
   return wrap;
 }
-  wrap.append(sw,meta,ctrl);
-  if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.style.display="none";
-  return wrap;
-}
+
 function btn(t){ const b=document.createElement("button"); b.className="icon"; b.textContent=t; return b; }
 
 function parseCSV(text){
