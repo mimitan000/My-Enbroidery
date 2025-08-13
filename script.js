@@ -1,4 +1,4 @@
-// v3.8.1 - Sticky jumpbar + JSON data + CSV import/export
+// v3.8.1 - Sticky jumpbar + JSON data + CSV import/export (+ UI/UX improvements)
 const MAKERS = ["DMC","COSMO","Olympus","Anchor"];
 const state = { currentTab:"inventory", currentMaker:"DMC", data:{}, inv:{}, wish:{} };
 
@@ -84,24 +84,68 @@ function renderList(){
   });
   setOffset();
 }
+
 function row(it, maker){
   const invKey=`${maker}:{${it.number}}`; const wishKey=invKey;
+
   const wrap=document.createElement("div"); wrap.className="row";
+
   const sw=document.createElement("div"); sw.className="swatch"; sw.style.background=it.hex||"#fff";
+
   const meta=document.createElement("div"); meta.className="meta";
   meta.innerHTML=`<div class="num">${it.number}</div><div class="maker">${maker}</div>`;
-  const ctrl=document.createElement("div"); ctrl.className="ctrl";
-  const plus=btn("+"), minus=btn("−"), heart=btn("♡");
-  const num=document.createElement("div"); num.className="count"; num.textContent=String(state.inv[invKey]||0);
-  if(state.wish[wishKey]) heart.textContent="❤️";
-  plus.addEventListener("click",()=>{ state.inv[invKey]=(state.inv[invKey]||0)+1; num.textContent=state.inv[invKey]; saveStore(); });
-  minus.addEventListener("click",()=>{ state.inv[invKey]=Math.max(0,(state.inv[invKey]||0)-1); num.textContent=state.inv[invKey]; saveStore(); });
-  heart.addEventListener("click",()=>{ state.wish[wishKey]=!state.wish[wishKey]; heart.textContent=state.wish[wishKey]?"❤️":"♡"; saveStore(); if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.remove(); });
-    // ここを追加
-  ctrl.append(plus, num, minus, heart);
 
+  const ctrl=document.createElement("div"); ctrl.className="ctrl";
+
+  const plus=btn("+"); plus.setAttribute("aria-label","在庫を1つ増やす");
+  const minus=btn("−"); minus.setAttribute("aria-label","在庫を1つ減らす");
+  const heart=btn("♡"); heart.classList.add("heart");
+  heart.setAttribute("title","欲しい物リストに追加/解除");
+  heart.setAttribute("aria-pressed","false");
+
+  const num=document.createElement("div"); 
+  num.className="count"; 
+  num.textContent=String(state.inv[invKey]||0);
+
+  // 状態反映
+  if(state.wish[wishKey]){ heart.textContent="❤️"; heart.setAttribute("aria-pressed","true"); heart.classList.add("active"); }
+
+  // −ボタンの活性/非活性
+  function updateMinus(){
+    const c = state.inv[invKey]||0;
+    minus.classList.toggle("disabled", c===0);
+  }
+  updateMinus();
+
+  // ハンドラ
+  plus.addEventListener("click",()=>{
+    state.inv[invKey]=(state.inv[invKey]||0)+1;
+    num.textContent=state.inv[invKey];
+    updateMinus();
+    saveStore();
+  });
+
+  minus.addEventListener("click",()=>{
+    state.inv[invKey]=Math.max(0,(state.inv[invKey]||0)-1);
+    num.textContent=state.inv[invKey];
+    updateMinus();
+    saveStore();
+  });
+
+  heart.addEventListener("click",()=>{
+    state.wish[wishKey]=!state.wish[wishKey];
+    heart.textContent=state.wish[wishKey]?"❤️":"♡";
+    heart.classList.toggle("active", state.wish[wishKey]);
+    heart.setAttribute("aria-pressed", String(state.wish[wishKey]));
+    saveStore();
+    if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.remove();
+  });
+
+  // 並べて追加
+  ctrl.append(plus, num, minus, heart);
   wrap.append(sw, meta, ctrl);
 
+  // wishlistタブではハート無い行は非表示
   if (state.currentTab === "wishlist" && !state.wish[wishKey]) wrap.style.display = "none";
   return wrap;
 }
@@ -158,7 +202,8 @@ function setOffset(){
 window.addEventListener("resize", ()=>setOffset(), {passive:true});
 
 (async function init(){
-  try{ state.inv=JSON.parse(localStorage.getItem("emb_inv_v1")||"{}"); }catch{}
-  try{ state.wish=JSON.parse(localStorage.getItem("emb_wish_v1")||"{}"); }catch{}
-  bindTabs(); bindTools(); await loadJSON(); renderJump(); renderList(); setOffset();
+  loadStore();
+  bindTabs(); bindTools();
+  await loadJSON();
+  renderJump(); renderList(); setOffset();
 })();
