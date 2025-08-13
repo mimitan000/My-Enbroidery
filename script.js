@@ -97,6 +97,14 @@ function row(it, maker){
   plus.addEventListener("click",()=>{ state.inv[invKey]=(state.inv[invKey]||0)+1; num.textContent=state.inv[invKey]; saveStore(); });
   minus.addEventListener("click",()=>{ state.inv[invKey]=Math.max(0,(state.inv[invKey]||0)-1); num.textContent=state.inv[invKey]; saveStore(); });
   heart.addEventListener("click",()=>{ state.wish[wishKey]=!state.wish[wishKey]; heart.textContent=state.wish[wishKey]?"❤️":"♡"; saveStore(); if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.remove(); });
+    // ここを追加
+  ctrl.append(plus, num, minus, heart);
+
+  wrap.append(sw, meta, ctrl);
+
+  if (state.currentTab === "wishlist" && !state.wish[wishKey]) wrap.style.display = "none";
+  return wrap;
+}
   wrap.append(sw,meta,ctrl);
   if(state.currentTab==="wishlist" && !state.wish[wishKey]) wrap.style.display="none";
   return wrap;
