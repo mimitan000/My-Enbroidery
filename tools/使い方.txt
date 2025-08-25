@@ -1,0 +1,63 @@
+Embroidery Data Updater
+=================================
+このフォルダの updater.html をダブルクリックで開き、
+各メーカーの CSV を選んで「変換（JSONを保存）」を押してください。
+DMC.json / COSMO.json / Olympus.json / Anchor.json がダウンロードされます。
+
+次に、アプリのリポジトリの /data にこれらの JSON を上書きアップロードしてください。
+スマホ/PCで公開URLを ?v=YYYYMMDD-HHMM 付きで開けば、即時反映されます。
+
+CSV から JSON への変換とアプリ反映手順
+
+
+
+1. CSVファイルを選択する(新しく変更済の)
+ 画面にある 「ファイルの選択」 ボタンで、
+
+ DMC.csv
+ COSMO.csv
+ Olympus.csv
+ Anchor.csv
+ をそれぞれ選びます。
+ （ 全メーカー分選んでおくのがベストです。どれか1つだけでも変換は可能ですが、最新状態にしたいなら全て選択します。）
+
+
+
+
+2. JSONを作成
+ 全部選択できたら 「変換（JSONを保存）」 ボタンを押します。
+
+ 押すと、自動で
+
+ DMC.json
+ COSMO.json
+ Olympus.json
+ Anchor.json
+
+ の4つのファイルがダウンロードされます。
+
+
+
+
+
+3. アプリのデータフォルダに置き換え
+ アプリフォルダ内の
+ data フォルダを開きます。
+
+中にある古い
+
+DMC.json
+COSMO.json
+Olympus.json
+Anchor.json
+を、新しくダウンロードしたものに上書き保存します。
+
+◎古いファイルを消してDMC(1)のようになってるものを名前変換でDMCにしてGithubのdetaファイルの中にアップロード
+
+
+
+
+
+
+
+
